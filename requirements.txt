@@ -1,10 +1,11 @@
 pip install -r requirements.txt
 
-pipx install pytessearct
-pipx install pandas
-pipx install numpy
-pipx install pillow
-pipx install openpyxl
+# for linux if any issue with pip
+# pipx install pytessearct
+# pipx install pandas
+# pipx install numpy
+# pipx install pillow
+# pipx install openpyxl
 
 
 
@@ -18,3 +19,13 @@ pip install pandas
 pip install numpy
 pip install pillow
 pip install openpyxl
+pip install pdf2image
+
+
+## extra features
+# pdf to image to excel
+#every 
+# in the all amount | MONTO should be calculated 
+# formula for amount calculation = 
+#=SUM(VALUE(TRIM(SUBSTITUTE(b4,"$",""))),VALUE(TRIM(SUBSTITUTE(b2,"$",""))))
+# seggegate the pdf's based on the bank name #yet to be implemented
