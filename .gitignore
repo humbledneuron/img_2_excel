@@ -1,4 +1,10 @@
+*.xlsx
+
+*.pdf
+
 myenv/
+
+unknown_pdfs/
 
 .gitignore
 
