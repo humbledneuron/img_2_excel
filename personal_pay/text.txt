@@ -1,0 +1,46 @@
+$]
+
+Fecha
+
+Hora
+
+Envia
+CUIL/CUIT
+Desde
+
+Recibe
+CUIL/CUIT
+Banco/Billetera
+CBU/CVU
+
+N° dela
+operacién
+
+CoelsalD
+
+personal pay
+
+Enviaste dinero
+
+.550.000"
+
+26/03/2024
+
+11:08 hs.
+
+Koenig, Cristian Hernan
+20-31338049-2
+
+Personal Pay
+
+Strongtech Srl
+30-71807148-4
+
+Banco Santander Rio S.a.
+0720792320000004367268
+
+4894060A0308C26D8A5860EA0020AA90B
+8FO
+
+86VRPQ2GDMPGOKQG2GLY0M
+
