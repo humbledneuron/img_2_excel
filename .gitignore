@@ -1,4 +1,7 @@
 *.xlsx
+*.xlsx#
+*.xls
+*.xls#
 
 *.pdf
 
