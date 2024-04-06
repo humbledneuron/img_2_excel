@@ -1,10 +1,6 @@
 # please run the following commands before running the code
 
-pip install pytesseract
-pip install numpy
-pip install pillow
-pip install openpyxl
-pip install pdf2image
+pip install pytesseract numpy pillow openpyxl pdf2image
 
 # structure
 
