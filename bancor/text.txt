@@ -1,0 +1,39 @@
+|BANCOR
+
+Cédigo de transaccion
+2F42CB
+
+Fecha de Ejecucion
+03/04/2024 17:42:59
+
+Datos de débito
+
+Cuenta débito: CA $ 316 0030015908
+Nombre: EDUARDO MARTIN CASELLI
+CUIT/CUIL: 20266916915
+
+Monto: $ 347.600,10
+
+Datos de crédito
+
+Cuenta crédito: Strongtech
+
+CBU/Alias CBU: 0720792320000004367268
+
+Cuenta: 792000436726
+Nombre: STRONGTECH SRL
+
+Concepto: Factura
+
+Manifiesto en caracter de declaracion jurada
+
+que el concepto informado para la
+
+transferencia es el correcto y se corresponde
+
+con la realidad, asumiendo cualquier
+
+responsabilidad resultante por falsedad y/u
+
+omision
+
