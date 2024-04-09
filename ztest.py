@@ -176,13 +176,13 @@ def extract_data_from_image(image_path):
     pdf_to_image(pdf_folder_path)
     extract_image_to_text(image_path)
     lines = extracted_text.split('\n')
-    lines_12 = lines[11]
+    lines_11 = lines[11]
     # # regEx patterns for different types of data to extract
     bank_pattern = 'bancopatagonia'
     date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
     amount_pattern = r'\$\s*\d+\.?\d*'
     proof_number_pattern = r'\b\d{10}\b'
-    payer_name_pattern = lines_12
+    payer_name_pattern = lines_11
     cuit_pattern =  'None' #MARTIN said Cuit IS FILLED MANUALLY 
     # Extract information using the regEx patterns
     details_regEx_patterns()
@@ -198,8 +198,6 @@ folder_path = 'bancopatagonia/bancopatagonia_assets'
 #function 
 check_image_and_padding(folder_path)
 
-
-
 #galicia
 def extract_data_from_image(image_path):
 
@@ -211,7 +209,7 @@ def extract_data_from_image(image_path):
     extract_image_to_text(image_path)
 
     lines = extracted_text.strip().split('\n')
-    line_9 = lines[8]
+    line_8 = lines[8]
 
     # Define regular expression patterns for different types of data to extract
 
@@ -220,7 +218,7 @@ def extract_data_from_image(image_path):
     amount_pattern = r'\$\s*\d+\.?\d*'
     proof_number_pattern = r'\b\d{9,11}\b'
     
-    payer_name_pattern = line_9 
+    payer_name_pattern = line_8
     
     cuit_pattern =  r'\b\d{2}-\d{8}-\d{1}\b'
 
@@ -247,7 +245,6 @@ folder_path = 'galicia/galicia_assets'
 
 #function 
 check_image_and_padding(folder_path)
-
 
 #mercado pago
 def extract_data_from_image(image_path):
@@ -322,7 +319,6 @@ folder_path = 'santander/santander_assets'
 #function 
 check_image_and_padding(folder_path)
 
-
 #supervielle
 def extract_data_from_image(image_path):
 
@@ -358,7 +354,6 @@ folder_path = 'supervielle/supervielle_assets'
 #function 
 check_image_and_padding(folder_path)
 
-
 #bna
 def extract_data_from_image(image_path):
 
@@ -370,7 +365,7 @@ def extract_data_from_image(image_path):
     
     date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
     amount_pattern = r'\$\s*\d+\.?\d*'
-    proof_number_pattern = r'\b\d{8}\b' #have to ask martin about this coz there's none
+    proof_number_pattern = r'\b\d{8}\b'
     
     payer_name_pattern = 'None' #MARTIN said NAME IS FILLED MANUALLY 
     cuit_pattern =  r'\b\d{11}\b'  #MARTIN said Cuit IS FILLED MANUALLY 
@@ -390,7 +385,6 @@ folder_path = 'bna/bna_assets'
 #function 
 check_image_and_padding(folder_path)
 
-
 #cuenta_dni  # bank image is not retriving
 def extract_data_from_image(image_path):
 
@@ -398,7 +392,7 @@ def extract_data_from_image(image_path):
     extract_image_to_text(image_path)
 
     lines = extracted_text.split('\n')
-    lines_8 = lines[7]
+    lines_7 = lines[7]
 
     # Define regular expression patterns for different types of data to extract
     bank_pattern = 'Cuenta DNI'
@@ -407,7 +401,7 @@ def extract_data_from_image(image_path):
     amount_pattern = r'\$\s*\d+\.?\d*'
     proof_number_pattern = r'\b\d{6}\b' #have to ask martin about this coz there's none
     
-    payer_name_pattern = lines_8
+    payer_name_pattern = lines_7
     
     cuit_pattern =  r'\b\d{11}\b' 
 
@@ -427,7 +421,6 @@ folder_path = 'cuenta_dni/cuenta_dni_assets'
 #function 
 check_image_and_padding(folder_path)
 
-
 #Banco Ciudad
 def extract_data_from_image(image_path):
 
@@ -440,8 +433,8 @@ def extract_data_from_image(image_path):
 
     lines = extracted_text.strip().split('\n')
     line_33 = lines[33] 
-    line_34 = lines[34]
-    line = line_33 + line_34
+    line_34 = line_33 + lines[34]
+    # line = line_33 + line_34
 
 
     # Define regular expression patterns for different types of data to extract
@@ -451,7 +444,7 @@ def extract_data_from_image(image_path):
     amount_pattern = r'\$\s*\d+\.?\d*'
     proof_number_pattern = r'\b\d{8}\b'
     
-    payer_name_pattern = line 
+    payer_name_pattern = line_34 
     
     cuit_pattern =  r'\b\d{2}-\d{8}-\d{1}\b'
 
@@ -479,7 +472,6 @@ folder_path = 'banco_ciudad/banco_ciudad_assets'
 
 #function 
 check_image_and_padding(folder_path)
-
 
 #Banco Santa Fe
 def extract_data_from_image(image_path):
@@ -520,7 +512,6 @@ def extract_data_from_image(image_path):
 
 # Define the folder containing the images
 folder_path = 'banco_santa_fe/banco_santa_fe_assets'
-
 #function 
 check_image_and_padding(folder_path)
 
@@ -752,9 +743,6 @@ folder_path = 'personal_pay/personal_pay_assets'
 #function 
 check_image_and_padding(folder_path)
 
-# Save the Excel file
-# wb.save('personal_pay_extracted_info.xlsx')
-
 
 #Bancor
 def extract_data_from_image(image_path):
@@ -924,7 +912,6 @@ folder_path = 'uala/uala_assets'
 
 #function 
 check_image_and_padding(folder_path)
-
 
 
 # sum and adding and saving and opening the file
