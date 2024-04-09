@@ -663,8 +663,9 @@ def extract_data_from_image(image_path):
 
     # Define regular expression patterns for different types of data to extract
 
-    bank_pattern = 'Banco Credicoop Coop. Ltdo.'
+    # bank_pattern = 'Banco Credicoop Coop. Ltdo.'
 
+    bank_pattern = line_2
     date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
 
     proof_number_pattern = r'\b\d{9}\b'
@@ -692,6 +693,68 @@ folder_path = 'banco_credicoop_coop_ltdo/banco_credicoop_coop_ltdo_assets'
 
 #function 
 check_image_and_padding(folder_path)
+
+#Personal pay
+def extract_data_from_image(image_path):
+
+    global bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern
+
+    pdf_folder_path = 'personal_pay/personal_pay_assets'
+    pdf_to_image(pdf_folder_path)
+
+    extract_image_to_text(image_path)
+
+    lines = extracted_text.strip().split('\n')
+
+    if lines[0] == 'personal pay':
+        global line_4, line_40, line_28
+        line_4 = lines[4] #24 for amount
+        line_4 = re.sub(r'"', '', line_4) # remove '' in the end of the amount
+        line_4 = re.sub(r'(?<=\$)(?=\d)', r' ', line_4) # adds '$ ' in place of '$'
+
+        line_39 = lines[39] #43 for first proof number
+        line_40 = line_39 + lines[40] #44 for second proof number
+
+        #for payer name
+        line_28 = lines[28]
+        # print(line_30)
+        
+    # Define regular expression patterns for different types of data to extract
+
+    bank_pattern = 'personal pay'
+    date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+
+    amount_pattern = line_4
+
+    proof_number_pattern = line_40
+    
+    payer_name_pattern = line_28
+    
+    cuit_pattern =  r'\b\d{2}-\d{8}-\d{1}\b'
+
+
+    # Extract information using the regEx patterns
+    details_regEx_patterns()
+
+    # Extract the date, amount, and CUIT number if any are found
+    extract_details()
+    
+    amount = line_4
+    proof_number = line_40
+    payer = line_28
+
+    # return extracted_details
+    return get_extracted_details(bank, date, amount, payer, cuit, proof_number)
+
+# Define the folder containing the images
+folder_path = 'personal_pay/personal_pay_assets'
+
+#function 
+check_image_and_padding(folder_path)
+
+# Save the Excel file
+# wb.save('personal_pay_extracted_info.xlsx')
+
 
 #Bancor
 def extract_data_from_image(image_path):
