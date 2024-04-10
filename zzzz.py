@@ -30,7 +30,7 @@ for filename in os.listdir(folder_path):
             global extracted_text, bank, date, amount, payer, cuit, proof_number
 
             extract_image_to_text(image_path)
-        # Your code to extract data from the image goes here
+            # Your code to extract data from the image goes here
             lines = extracted_text.split('\n')
             line = lines[0].lower()
     

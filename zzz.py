@@ -152,6 +152,8 @@ def extract_data_from_image(image_path):
         return get_extracted_details(bank, date, amount, payer, cuit, proof_number)
 
     if line == 'galicia':
+        bank_pattern = 'galicia'
+
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{11}\b'
