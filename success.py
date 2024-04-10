@@ -108,6 +108,10 @@ def extract_data_from_image(image_path):
             bank_name = "Bancor"
             break
 
+        elif "uala" in line.lower():
+            bank_name = "Uala"
+            break
+
     if bank_name == "Bancopatagonia":
         global bank, date, amount, payer, cuit, proof_number
         bank_pattern = 'Bancopatagonia'
@@ -494,7 +498,49 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+    elif bank_name == "Uala":
 
+        # for  uala.png and uala1.png formats
+        if lines[0] == "afr":
+            # global line_8, line_10
+            #payer name
+            line_8 = lines[9]
+            line_8 = line_8.replace("Nombre remitente ", "")
+            # print(line_8)
+            #for proof number
+            line_10 = lines[11]
+            line_10 = line_10.replace("Id Op. ", "")
+            # print(line_10)
+        if lines[0] == "VAD Comprobante de transferencia":
+            #payer name
+            line_8 = lines[8]
+            line_8 = line_8.replace("Nombre remitente ", "")
+            # print(line_8)
+            #for proof number
+            line_10 = lines[10]
+            line_10 = line_10.replace("Id Op. ", "")
+
+        bank_pattern = 'Uala'
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
+        proof_number_pattern = line_10
+        payer_name_pattern = line_8
+        cuit_pattern = "None"  # MARTIN SAID Cuit IS FILLED MANUALLY
+
+        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        dates_found = re.findall(date_pattern, extracted_text)
+        amounts_found = re.findall(amount_pattern, extracted_text)
+        payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        cuit_found = re.findall(cuit_pattern, extracted_text)
+        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        bank = bank_found[0] if bank_found else None
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[0] if amounts_found else None
+        amount = amount.replace('$', '$ ') #replaces '$' with '$ '
+        payer = payer_name_found[0] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[0] if proof_number_found else None
 
     # Return the extracted data
     return {
