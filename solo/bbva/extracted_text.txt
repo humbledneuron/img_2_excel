@@ -1,0 +1,22 @@
+B BV. i Transferencias Inmediatas Otras Entidades
+
+Datos Ordenante: N° de Referencia
+Cuenta Origen: CC $ 0264-012262/3 50076821 004240326
+Titularidad: EL ORIGEN S.A.S Fecha
+CUIT / CUIL/ CDI: 30-71746255-2 26/03/2024
+Datos Beneficiario: Hora
+CBU/CVU Destino: 0720792320000004367268 12:51:00
+Titularidad: STRONGTECH SRL
+
+CUIT / CUIL/ CDI: 30-71807148-4
+
+Importe: 122.500,00
+
+Motivo: Stontur
+
+Concepto: VARIOS
+
+(S.E.U.O.)
+
+Esta operacion ha sido realizada a través de BBVA Net Cash
+
