@@ -50,6 +50,10 @@ def extract_data_from_image(image_path):
         elif "galicia" in line.lower():
             bank_name = "Galicia"
             break
+        elif "mercado pago" in line.lower():
+            bank_name = "Mercado pago"
+            break
+
 
     if bank_name == "Bancopatagonia":
         global bank, date, amount, payer, cuit, proof_number
@@ -99,6 +103,28 @@ def extract_data_from_image(image_path):
             proof_number = next((p for p in proof_number_found if len(p) == 9), None)
         else:
             proof_number = proof_number_found[0] if proof_number_found else None
+
+    elif bank_name == "Mercado pago":
+        bank_pattern = 'mercado pago'
+        date_pattern = r'\b\d{1,2} de [a-z]+ \d{4}\b'
+        amount_pattern = r'\$\s*\d[\d,\.]*'
+        proof_number_pattern = r'\b\d{11}\b'
+        payer_name_pattern = r'(?:de )?([A-Z][a-z]+(?: [A-Z][a-z]+)*)'
+        cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
+
+        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        dates_found = re.findall(date_pattern, extracted_text)
+        amounts_found = re.findall(amount_pattern, extracted_text)
+        payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        cuit_found = re.findall(cuit_pattern, extracted_text)
+        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        bank = bank_found[0] if bank_found else None
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[0] if amounts_found else None
+        payer = payer_name_found[1] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[0] if proof_number_found else None
 
     # Return the extracted data
     return {
