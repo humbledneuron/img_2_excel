@@ -108,8 +108,14 @@ def extract_data_from_image(image_path):
             bank_name = "Bancor"
             break
 
-        elif "uala" in line.lower():
-            bank_name = "Uala"
+        elif "xp" in line.lower(): # or 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
+            print(line.lower())
+            bank_name = "HSBC"
+            break
+
+        elif "uala" in line.lower(): 
+            # print(line.lower())
+            bank_name = "Uala" 
             break
 
     if bank_name == "Bancopatagonia":
@@ -497,6 +503,34 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+    elif bank_name == "HSBC":
+
+        #for payer name
+        line_11 = lines[11]
+        line_11 = re.sub(r'^\w+:+\s+\b', '', line_11)
+
+        bank_pattern = 'Uala' #'usec' #HSBC is detected as that
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
+        proof_number_pattern = r'\b\d{4}\b'
+        payer_name_pattern = "None"
+        cuit_pattern = "None"  # MARTIN SAID Cuit IS FILLED MANUALLY
+
+        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        dates_found = re.findall(date_pattern, extracted_text)
+        amounts_found = re.findall(amount_pattern, extracted_text)
+        payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        cuit_found = re.findall(cuit_pattern, extracted_text)
+        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        bank = "Uala"
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[0] if amounts_found else None
+        amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
+        payer = payer_name_found[0] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[1] if proof_number_found else None
 
     elif bank_name == "Uala":
 
