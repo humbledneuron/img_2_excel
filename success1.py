@@ -56,9 +56,11 @@ def extract_data_from_image(image_path):
         elif "mercado pago" in line.lower():
             bank_name = "Mercado pago"
             break
-        # elif "santander" in line.lower():
-        #     bank_name = "Santander"
-        #     break
+        
+        if "«> santander" in line.lower(): #santander is in many banks, thats why this
+            print(line.lower())
+            bank_name = "Santander"
+            break
 
         #'fo al' because it is not dectecting the CUenta DNI
         # elif "cuentadni" in line.lower():
@@ -111,8 +113,8 @@ def extract_data_from_image(image_path):
             bank_name = "Bancor"
             break
 
-        elif "xp uss" in line.lower(): # or 'uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
+        elif "xp" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
+            # print(line.lower())
             bank_name = "HSBC"
             break
 
@@ -125,7 +127,7 @@ def extract_data_from_image(image_path):
         global bank, date, amount, payer, cuit, proof_number
         bank_pattern = 'Bancopatagonia'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{10}\b'
         payer_name_pattern = lines[11]
         cuit_pattern = 'None'  # MARTIN SAID Cuit IS FILLED MANUALLY
@@ -147,7 +149,7 @@ def extract_data_from_image(image_path):
     elif bank_name == "Galicia":
         bank_pattern = 'Galicia'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{11}\b'
         payer_name_pattern = lines[8]
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
@@ -173,7 +175,7 @@ def extract_data_from_image(image_path):
     elif bank_name == "Mercado pago":
         bank_pattern = 'Mercado pago'
         date_pattern = r'\b\d{1,2} de [a-z]+ \d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{11}\b'
         payer_name_pattern = r'(?:de )?([A-Z][a-z]+(?: [A-Z][a-z]+)*)'
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
@@ -192,57 +194,11 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
-        """elif bank_name == "Santander":
-        bank_pattern = 'Santander'
-        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
-        proof_number_pattern = r'\b\d{8}\b'
-        payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
-        cuit_pattern = 'None' #MARTIN SAID Cuit IS FILLED MANUALLY 
-
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
-
-        bank = bank_found[0] if bank_found else None
-        date = dates_found[0] if dates_found else None
-        amount = amounts_found[0] if amounts_found else None
-        payer = payer_name_found[0] if payer_name_found else None
-        cuit = cuit_found[0] if cuit_found else None
-        proof_number = proof_number_found[0] if proof_number_found else None"""
-
-        """elif bank_name == "Cuenta DNI":
-        lines_7 = lines[7]
-        bank_pattern = 'Cuenta DNI'
-        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
-        proof_number_pattern = r'\b\d{6}\b'
-        payer_name_pattern = lines_7  
-        cuit_pattern = r'\b\d{11}\b'
-
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
-
-        # bank = bank_found[0] if bank_found else None
-        bank = bank_pattern
-        date = dates_found[0] if dates_found else None
-        amount = amounts_found[0] if amounts_found else None
-        payer = payer_name_found[0] if payer_name_found else None
-        cuit = cuit_found[0] if cuit_found else None
-        proof_number = proof_number_found[0] if proof_number_found else None"""
-
    # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "BNA":
         bank_pattern = 'BNA'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
         payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
         cuit_pattern = r'\b\d{11}\b' #MARTIN SAID Cuit IS FILLED MANUALLY 
@@ -265,7 +221,7 @@ def extract_data_from_image(image_path):
     elif bank_name == "SUPERVIELLE":
         bank_pattern = 'SUPERVIELLE'
         date_pattern = r'\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{4}\b'
         payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
         cuit_pattern = 'None' #MARTIN SAID Cuit IS FILLED MANUALLY 
@@ -290,7 +246,7 @@ def extract_data_from_image(image_path):
 
         bank_pattern = 'BancoCiudad'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
         payer_name_pattern = lines_33
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
@@ -315,7 +271,7 @@ def extract_data_from_image(image_path):
 
         bank_pattern = 'Banco Santa Fe'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
         payer_name_pattern = line_24
         cuit_pattern = r'\b\d{11}\b'
@@ -579,6 +535,52 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+    elif bank_name == "Santander":
+        bank_pattern = 'Santander'
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
+        proof_number_pattern = r'\b\d{8}\b'
+        payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
+        cuit_pattern = 'None' #MARTIN SAID Cuit IS FILLED MANUALLY 
+
+        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        dates_found = re.findall(date_pattern, extracted_text)
+        amounts_found = re.findall(amount_pattern, extracted_text)
+        payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        cuit_found = re.findall(cuit_pattern, extracted_text)
+        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        bank = bank_found[0] if bank_found else None
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[0] if amounts_found else None
+        payer = payer_name_found[0] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[0] if proof_number_found else None
+
+        """elif bank_name == "Cuenta DNI":
+        lines_7 = lines[7]
+        bank_pattern = 'Cuenta DNI'
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern = r'\$\s*\d[\d,\.]*'
+        proof_number_pattern = r'\b\d{6}\b'
+        payer_name_pattern = lines_7  
+        cuit_pattern = r'\b\d{11}\b'
+
+        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        dates_found = re.findall(date_pattern, extracted_text)
+        amounts_found = re.findall(amount_pattern, extracted_text)
+        payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        cuit_found = re.findall(cuit_pattern, extracted_text)
+        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # bank = bank_found[0] if bank_found else None
+        bank = bank_pattern
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[0] if amounts_found else None
+        payer = payer_name_found[0] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[0] if proof_number_found else None"""
+    
     # Return the extracted data
     return {
         'BANCO': bank_name,
