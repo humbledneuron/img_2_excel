@@ -637,6 +637,14 @@ check_image_and_padding(folder_path)
 print(f"total sum: {last_amt}")
 print(f"Current total sum: {sum(last_amt)}")
 
+
+total_sum_row = [None, None, None, None, None, None, None]
+ws.append(total_sum_row)
+total_sum_row = [None, None, None, None, None, None, None]
+ws.append(total_sum_row)
+total_sum_row = [None, None, None, None, None, None, None]
+ws.append(total_sum_row)
+
 total_sum = sum(last_amt)
 # Append the total sum row to the Excel sheet
 total_sum_row = ['TOTAL', None, f'${total_sum}', None, None, None, None]
