@@ -591,6 +591,8 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+    
+
     # Return the extracted data
     return {
         'BANCO': bank_name,
@@ -600,6 +602,7 @@ def extract_data_from_image(image_path):
         'TITULAR': payer,
         'CUIT': cuit
     }
+    move_undetected_images(folder_path, undetected_folder)
 
    
 
@@ -664,7 +667,6 @@ formatted_date = today.strftime("%d_%m_%Y")
 
 # Specify the path to the extracted file
 extracted_file_path = f'{formatted_date}_extracted_info.xlsx'
-move_undetected_images(folder_path, undetected_folder)
 # Save the Excel file
 wb.save(extracted_file_path)
 
