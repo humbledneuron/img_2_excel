@@ -7,6 +7,7 @@ import pytesseract
 import re
 from decimal import Decimal
 
+
 # Global variables
 index = 1
 last_amt = []
@@ -64,6 +65,7 @@ def details_regEx_patterns():
     global bank_pattern, date_pattern, amount_pattern, payer_name_pattern, cuit_pattern, proof_number_pattern, extracted_text, bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
 
     bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+    
     dates_found = re.findall(date_pattern, extracted_text)
     amounts_found = re.findall(amount_pattern, extracted_text)
     payer_name_found = re.findall(payer_name_pattern , extracted_text)
@@ -387,7 +389,12 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+
     elif bank_name == "Banco Credicoop Coop. Ltdo":
+
+        # #for bank name if in case it is not detected uncomment below
+        # line_2 = lines[2] #CREDICOOP Banco Credicoop Coop. Ltdo
+        # line_2 = re.sub(r'^\w+\s+\b', '', line_2)
 
         bank_pattern = 'Banco Credicoop Coop. Ltdo' #line_2
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
@@ -424,25 +431,23 @@ def extract_data_from_image(image_path):
             #for payer name
             line_28 = lines[28]
 
+        bank_pattern = 'Personal Pay'
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern = line_4
+        payer_name_pattern = line_28
+        proof_number_pattern = line_40
 
-            bank_pattern = 'Personal Pay'
-            date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-            amount_pattern = line_4
-            payer_name_pattern = line_28
-            proof_number_pattern = line_40
-            cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
+        cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-            # Extract information using the regEx patterns
-            details_regEx_patterns()
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
-            bank = bank_found[0] if bank_found else None
-            date = dates_found[0] if dates_found else None
-            amount = line_4
-            payer = line_28
-            cuit = cuit_found[0] if cuit_found else None
-            proof_number = line_40
-        else: 
-            print("the second format of Personal Pay can't be detected")
+        bank = bank_found[0] if bank_found else None
+        date = dates_found[0] if dates_found else None
+        amount = line_4
+        payer = line_28
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = line_40
 
     elif bank_name == "Bancor":
 
@@ -468,6 +473,7 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
 
     elif bank_name == "HSBC":
 
@@ -532,6 +538,7 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
 
     elif bank_name == "Santander":
         bank_pattern = 'Santander'
@@ -646,7 +653,12 @@ formatted_date = today.strftime("%d_%m_%Y")
 # Specify the path to the extracted file
 extracted_file_path = f'{formatted_date}_extracted_info.xlsx'
 
+
 # Save the Excel file
 wb.save(extracted_file_path)
 
+# Open the file with LibreOffice in linux
 subprocess.run(['libreoffice', extracted_file_path])
+
+# Open the file with Microsoft Excel in windows
+#os.system("start EXCEL.EXE extracted_info.xlsx")
