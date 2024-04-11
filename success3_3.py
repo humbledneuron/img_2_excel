@@ -1,4 +1,4 @@
-import os, subprocess
+import os, shutil, subprocess
 from openpyxl import Workbook
 from pdf2image import convert_from_path
 from openpyxl.styles import Font, Alignment, PatternFill
@@ -11,6 +11,8 @@ from decimal import Decimal
 index = 1
 last_amt = []
 folder_path = 'source'
+undetected_folder = 'undetected'
+
 processed_files = set()
 
 # Create Excel workbook
@@ -71,6 +73,24 @@ def details_regEx_patterns():
     proof_number_found = re.findall(proof_number_pattern, extracted_text)
 
     return bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
+
+# Function to move undetected images to a separate folder
+def move_undetected_images(source_folder, undetected_folder):
+    # Create the undetected folder if it doesn't exist
+    if not os.path.exists(undetected_folder):
+        os.makedirs(undetected_folder)
+    
+    # Get the list of all image files in the source folder
+    image_files = [file for file in os.listdir(source_folder) if file.lower().endswith(('.jpg', '.jpeg', '.png'))]
+
+    # Move undetected images to the undetected folder
+    for filename in image_files:
+        # Check if the image file has been processed and added to the Excel sheet
+        if filename not in processed_files:
+            source_path = os.path.join(source_folder, filename)
+            destination_path = os.path.join(undetected_folder, filename)
+            shutil.move(source_path, destination_path)
+            print(f"Moved '{filename}' to '{undetected_folder}'")
 
 # Function to extract data from an image based on its content
 def extract_data_from_image(image_path):
@@ -644,8 +664,9 @@ formatted_date = today.strftime("%d_%m_%Y")
 
 # Specify the path to the extracted file
 extracted_file_path = f'{formatted_date}_extracted_info.xlsx'
-
+move_undetected_images(folder_path, undetected_folder)
 # Save the Excel file
 wb.save(extracted_file_path)
+
 
 # subprocess.run(['libreoffice', extracted_file_path])
