@@ -743,7 +743,6 @@ folder_path = 'personal_pay/personal_pay_assets'
 #function 
 check_image_and_padding(folder_path)
 
-
 #Bancor
 def extract_data_from_image(image_path):
 
@@ -789,7 +788,6 @@ folder_path = 'bancor/bancor_assets'
 
 #function 
 check_image_and_padding(folder_path)
-
 
 #hsbc
 def extract_data_from_image(image_path):
@@ -845,7 +843,6 @@ folder_path = 'hsbc/hsbc_assets'
 
 #function 
 check_image_and_padding(folder_path)
-
 
 #uala
 def extract_data_from_image(image_path):
@@ -915,7 +912,6 @@ check_image_and_padding(folder_path)
 
 
 # sum and adding and saving and opening the file
-
 print(f"total sum: {last_amt}")
 print(f"Current total sum: {sum(last_amt)}")
 

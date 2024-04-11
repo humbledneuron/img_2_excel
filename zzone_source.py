@@ -142,14 +142,14 @@ def extract_data_from_image(image_path):
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
         proof_number_pattern = r'\b\d{11}\b'
 
-    if any("santander" in line.lower() for line in lines):
-        # global bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern
-        bank_pattern = 'santander'
-        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d+\.?\d*'
-        proof_number_pattern = r'\b\d{8}\b'
-        payer_name_pattern = 'None'
-        cuit_pattern = 'None'
+    # if any("santander" in line.lower() for line in lines):
+    #     # global bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern
+    #     bank_pattern = 'santander'
+    #     date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+    #     amount_pattern = r'\$\s*\d+\.?\d*'
+    #     proof_number_pattern = r'\b\d{8}\b'
+    #     payer_name_pattern = 'None'
+    #     cuit_pattern = 'None'
 
     if any("supervielle" in line.lower() for line in lines):
         # global bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern

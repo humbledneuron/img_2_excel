@@ -4,75 +4,14 @@ from openpyxl.styles import Font, Alignment, PatternFill
 import cv2
 import pytesseract
 import re
+from decimal import Decimal
+
 
 # Global variables
 index = 1
-folder_path = 'zource'
 last_amt = []
+folder_path = 'zource'
 processed_files = set()
-
-def pdf_to_image(pdf_folder_path):    
-
-    pdf_files = [file for file in os.listdir(pdf_folder_path) if file.endswith('.pdf')]
-    
-    # Convert each PDF file to images
-    for pdf_file in pdf_files:
-        # Construct the file paths
-        pdf_file_path = os.path.join(pdf_folder_path, pdf_file)
-        image_file_path = os.path.join(pdf_folder_path, os.path.splitext(pdf_file)[0] + '.png')
-    
-        # Convert PDF to list of PIL images
-        images = convert_from_path(pdf_file_path)
-    
-        # Save each page of the PDF as an image file
-        for i, image in enumerate(images):
-            image.save(image_file_path, 'PNG')
-    
-    print('PDFs converted to images successfully.')
-
-# Function to extract text from an image using Tesseract OCR
-def extract_image_to_text(image_path):
-    image = cv2.imread(image_path)
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    extracted_text = pytesseract.image_to_string(gray_image)
-    return extracted_text
-
-#regEx patterns
-def details_regEx_patterns():
-    global bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
-
-    bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-    
-    dates_found = re.findall(date_pattern, extracted_text)
-    amounts_found = re.findall(amount_pattern, extracted_text)
-    payer_name_found = re.findall(payer_name_pattern , extracted_text)
-    cuit_found = re.findall(cuit_pattern, extracted_text)
-    proof_number_found = re.findall(proof_number_pattern, extracted_text)
-
-    return bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
-
-# Extract the first date, amount, and CUIT number if any are found
-def extract_details():
-    global bank, date, amount, payer, cuit, proof_number
-    
-    bank = bank_found[0] if bank_found else None
-    date = dates_found[0] if dates_found else None
-    amount = amounts_found[0] if amounts_found else None
-    proof_number = proof_number_found[0] if proof_number_found else None
-    
-    payer = payer_name_found[0] if payer_name_found else None
-    cuit = cuit_found[0] if cuit_found else None
-
-#return the extracted details
-def get_extracted_details(bank, date, amount, payer, cuit, proof_number):
-    return {
-        'BANCO': bank,
-        'FECHA': date,
-        'IMPORTE': amount,
-        'TITULAR': payer,
-        'CUIT': cuit,
-        'NRO COMPROBANTE': proof_number
-    }
 
 # Create Excel workbook
 wb = Workbook()
@@ -93,61 +32,12 @@ for row in ws.iter_rows():
     for cell in row:
         cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
 
-# Function to check images in the folder and add data to Excel sheet
-def check_image_and_padding(folder_path):
-    global index, last_amt
-     
-    # total_sum_formula = Decimal(0)
-
-     # Start from the second row (after the header row)
-     # Process each image in the folder
-
-    yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-
-    for filename in os.listdir(folder_path):
-        if filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".jpeg"):
-            # Extract data from the image
-            image_path = os.path.join(folder_path, filename)
-            extracted_data = extract_data_from_image(image_path)
-
-            # print(f"Processing image: {filename}")
-            # print(f"Extracted data: {extracted_data}")
-
-            row_data = [index] # Add the serial number as the first element
-            row_data.extend([extracted_data.get(header) for header in headers[1:]])
-            ws.append(row_data)
-            index += 1            
-            # row_data = [index] + [extracted_data.get(header) for header in headers[1:]]
-
-            # Update total sum formula dynamically
-            if extracted_data['IMPORTE']:
-                amt = re.sub(r'[^\$\s0-9.]', '', extracted_data['IMPORTE'])
-                num_amt = Decimal(re.sub(r'[^\d.]', '', amt))
-                # total_sum_formula += num_amt
-
-                last_amt.append(num_amt)
-                print(f"Current total sum: {sum(last_amt)}")
-            
-            # Apply yellow fill to cells that are empty in the row
-            if any(is_empty(cell.value) for cell in ws[ws.max_row]):
-                for cell in ws[ws.max_row]:
-                    if is_empty(cell.value):
-                        cell.fill = yellow_fill
-
-    for column_cells in ws.columns:
-        max_length = 0
-        for cell in column_cells:
-            try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(cell.value)
-            except:
-                pass
-        adjusted_width = (max_length + 2) * 1.2  # Adjust the multiplier as needed
-        ws.column_dimensions[column_cells[0].column_letter].width = adjusted_width
-
-# Function to check if a cell is empty
-def is_empty(cell_value):
-    return cell_value is None or cell_value == ''
+# Function to extract text from an image using Tesseract OCR
+def extract_image_to_text(image_path):
+    image = cv2.imread(image_path)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    extracted_text = pytesseract.image_to_string(gray_image)
+    return extracted_text
 
 # Function to extract data from an image based on its content
 def extract_data_from_image(image_path):
@@ -699,8 +589,49 @@ def extract_data_from_image(image_path):
         'CUIT': cuit
     }
 
+# Function to check if a cell is empty
+def is_empty(cell_value):
+    return cell_value is None or cell_value == ''
 
-### heres a bit catchy 
+# Function to check images in the folder and add data to Excel sheet
+def check_image_and_padding(folder_path):
+    global index, last_amt
+    yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+    for filename in os.listdir(folder_path):
+        if filename.lower().endswith(('.jpg', '.jpeg', '.png')) and filename not in processed_files:
+            processed_files.add(filename)
+            # Extract data from the image
+            image_path = os.path.join(folder_path, filename)
+            extracted_data = extract_data_from_image(image_path)
+            if extracted_data:
+                # Add data to Excel sheet
+                row_data = [index]
+                row_data.extend([extracted_data.get(header, '') for header in headers[1:]])
+                ws.append(row_data)
+                index += 1
+                            # Update total sum formula dynamically
+                if extracted_data['IMPORTE']:
+                    amt = re.sub(r'[^\$\s0-9.]', '', extracted_data['IMPORTE'])
+                    num_amt = Decimal(re.sub(r'[^\d.]', '', amt))
+                    # total_sum_formula += num_amt
+
+                    last_amt.append(num_amt)
+                    print(f"Current total sum: {sum(last_amt)}")
+
+                # Apply yellow fill to empty cells
+                if any(is_empty(cell.value) for cell in ws[ws.max_row]):
+                    for cell in ws[ws.max_row]:
+                        if is_empty(cell.value):
+                            cell.fill = yellow_fill
+    # Adjust column widths
+    for column_cells in ws.columns:
+        max_length = max(len(str(cell.value)) for cell in column_cells)
+        adjusted_width = (max_length + 2) * 1.2
+        ws.column_dimensions[column_cells[0].column_letter].width = adjusted_width
+
+# Process images in the folder and save Excel file
+check_image_and_padding(folder_path)
+# wb.save('Extracted_Data.xlsx')
 
 # sum and adding and saving and opening the file
 print(f"total sum: {last_amt}")
@@ -727,6 +658,3 @@ import os
 
 # Open the file with LibreOffice in linux
 subprocess.run(['libreoffice', extracted_file_path])
-
-# Open the file with Microsoft Excel in windows
-#os.system("start EXCEL.EXE extracted_info.xlsx")
