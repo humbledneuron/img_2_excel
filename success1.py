@@ -111,7 +111,7 @@ def extract_data_from_image(image_path):
             bank_name = "Bancor"
             break
 
-        elif "xp" in line.lower(): # or 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
+        elif "xp uss" in line.lower(): # or 'uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
             print(line.lower())
             bank_name = "HSBC"
             break
