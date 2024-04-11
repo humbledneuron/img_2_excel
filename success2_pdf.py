@@ -90,9 +90,9 @@ def extract_data_from_image(image_path):
             # print(bank_name)
             break
 
-            #'fo al' or 'foy' because it is not dectecting the CUenta DNI
+        #'fo al' or 'foy' because it is not dectecting the CUenta DNI
         elif "fo al" in line.lower():
-            # print(line.lower())
+            print(line.lower())
             bank_name = "Cuenta DNI"
             # print(bank_name)
             break
@@ -802,8 +802,9 @@ check_image_and_padding(folder_path)
 # wb.save('Extracted_Data.xlsx')
 
 # sum and adding and saving and opening the file
-print(f"total sum: {last_amt}")
-print(f"Current total sum: {sum(last_amt)}")
+
+# print(f"total sum: {last_amt}")
+# print(f"Current total sum: {sum(last_amt)}")
 
 
 total_sum_row = [None, None, None, None, None, None, None]
