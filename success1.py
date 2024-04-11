@@ -48,79 +48,100 @@ def extract_data_from_image(image_path):
     bank_name = None
     for line in lines:
         if "bancopatagonia" in line.lower():
+            # print(line.lower())
             bank_name = "Bancopatagonia"
+            # print(bank_name)
             break
         elif "galicia" in line.lower():
+            # print(line.lower())
             bank_name = "Galicia"
+            # print(bank_name)
             break
         elif "mercado pago" in line.lower():
+            # print(line.lower())
             bank_name = "Mercado pago"
+            # print(bank_name)
             break
         
         if "«> santander" in line.lower(): #santander is in many banks, thats why this
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Santander"
+            # print(bank_name)
             break
 
-        #'fo al' because it is not dectecting the CUenta DNI
-        # elif "cuentadni" in line.lower():
-        #     bank_name = "Cuenta DNI"
-        #     break
+            #'fo al' or 'foy' because it is not dectecting the CUenta DNI
+        elif "fo al" in line.lower():
+            # print(line.lower())
+            bank_name = "Cuenta DNI"
+            # print(bank_name)
+            break
 
-        # hold this becauze it has the 'Santander' word in the middle of the text
+            # hold this becauze it has the 'Santander' word in the middle of the text
         elif "bna" in line.lower():
             # print(line.lower())
             bank_name = "BNA"
+            # print(bank_name)
             break
 
-        # hold this becauze it has the 'Santander' word in the middle of the text
+            # hold this becauze it has the 'Santander' word in the middle of the text
         elif "supervielle" in line.lower():
             # print(line.lower())
             bank_name = "SUPERVIELLE"
+            # print(bank_name)
             break
 
         elif "bancociudad" in line.lower():
             # print(line.lower())
             bank_name = "BancoCiudad"
+            # print(bank_name)
             break
 
         elif "banco santa fe" in line.lower():
             # print(line.lower())
             bank_name = "Banco Santa Fe"
+            # print(bank_name)
             break
 
         elif "bbva" in line.lower():
             # print(line.lower())
             bank_name = "BBVA"
+            # print(bank_name)
             break
 
         elif "naranja x" in line.lower():
             # print(line.lower())
             bank_name = "Naranja X"
+            # print(bank_name)
             break
 
         elif "banco credicoop coop. ltdo" in line.lower():
             # print(line.lower())
             bank_name = "Banco Credicoop Coop. Ltdo"
+            # print(bank_name)
             break
 
         elif "personal pay" in line.lower():
             # print(line.lower())
             bank_name = "Personal Pay"
+            # print(bank_name)
             break
 
         elif "bancor" in line.lower():
+            # print(line.lower())
             bank_name = "Bancor"
+            # print(bank_name)
             break
 
         elif "xp" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
             # print(line.lower())
             bank_name = "HSBC"
+            # print(bank_name)
             break
 
         elif "uala" in line.lower(): 
             # print(line.lower())
             bank_name = "Uala" 
+            # print(bank_name)
             break
 
     if bank_name == "Bancopatagonia":
@@ -146,11 +167,18 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "Galicia":
         bank_pattern = 'Galicia'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
-        proof_number_pattern = r'\b\d{11}\b'
+        proof_number_pattern = r'\b\d{9,11}\b'
         payer_name_pattern = lines[8]
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
@@ -167,10 +195,21 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
 
+            # Check if both 9-digit and 11-digit proof numbers are present
         if any(len(p) == 9 for p in proof_number_found) and any(len(p) == 11 for p in proof_number_found):
+            # Extract the 9-digit proof number if both are present
             proof_number = next((p for p in proof_number_found if len(p) == 9), None)
         else:
+            # Extract the first found proof number (either 9-digit or 11-digit)
             proof_number = proof_number_found[0] if proof_number_found else None
+
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
 
     elif bank_name == "Mercado pago":
         bank_pattern = 'Mercado pago'
@@ -193,6 +232,14 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[1] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
 
    # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "BNA":
@@ -217,6 +264,13 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None 
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "SUPERVIELLE":
         bank_pattern = 'SUPERVIELLE'
@@ -239,6 +293,13 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
 
     elif bank_name == "BancoCiudad":
 
@@ -265,6 +326,13 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[1] if cuit_found else None
         proof_number = proof_number_found[1] if proof_number_found else None
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "Banco Santa Fe":
 
         line_24 = lines[24] 
@@ -289,6 +357,13 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
 
     elif bank_name == "BBVA":
 
@@ -335,6 +410,14 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = line_3
 
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "Naranja X":
 
         #for date
@@ -366,6 +449,13 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "Banco Credicoop Coop. Ltdo":
 
         # #for bank name if in case it is not detected uncomment below
@@ -395,6 +485,14 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
 
     elif bank_name == "Personal Pay":
 
@@ -434,6 +532,13 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = line_40
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "Bancor":
 
         #for proof number
@@ -463,13 +568,20 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "HSBC":
 
         #for payer name
         line_11 = lines[11]
         line_11 = re.sub(r'^\w+:+\s+\b', '', line_11)
 
-        bank_pattern = 'Uala' #'usec' #HSBC is detected as that
+        bank_pattern = 'HSBC' #'usec' #HSBC is detected as that
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
         proof_number_pattern = r'\b\d{4}\b'
@@ -483,13 +595,21 @@ def extract_data_from_image(image_path):
         cuit_found = re.findall(cuit_pattern, extracted_text)
         proof_number_found = re.findall(proof_number_pattern, extracted_text)
 
-        bank = "Uala"
+        bank = "HSBC"
         date = dates_found[0] if dates_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[1] if proof_number_found else None
+
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
 
     elif bank_name == "Uala":
 
@@ -535,6 +655,13 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
     elif bank_name == "Santander":
         bank_pattern = 'Santander'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
@@ -557,11 +684,18 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
-        """elif bank_name == "Cuenta DNI":
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
+    elif bank_name == "Cuenta DNI":
         lines_7 = lines[7]
         bank_pattern = 'Cuenta DNI'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{6}\b'
         payer_name_pattern = lines_7  
         cuit_pattern = r'\b\d{11}\b'
@@ -579,8 +713,17 @@ def extract_data_from_image(image_path):
         amount = amounts_found[0] if amounts_found else None
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
-        proof_number = proof_number_found[0] if proof_number_found else None"""
+        proof_number = proof_number_found[0] if proof_number_found else None
     
+
+        # print(f"bank: {bank}")
+        # print(f"date: {date}")
+        # print(f"amount: {amount}")
+        # print(f"payer: {payer}")
+        # print(f"cuit: {cuit}")
+        # print(f"proof_number: {proof_number}")
+
+        
     # Return the extracted data
     return {
         'BANCO': bank_name,
