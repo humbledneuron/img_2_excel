@@ -60,9 +60,35 @@ def extract_image_to_text(image_path):
     extracted_text = pytesseract.image_to_string(gray_image)
     return extracted_text
 
+#regEx patterns
+def details_regEx_patterns():
+    global bank_pattern, date_pattern, amount_pattern, payer_name_pattern, cuit_pattern, proof_number_pattern, extracted_text, bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
+
+    bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+    
+    dates_found = re.findall(date_pattern, extracted_text)
+    amounts_found = re.findall(amount_pattern, extracted_text)
+    payer_name_found = re.findall(payer_name_pattern , extracted_text)
+    cuit_found = re.findall(cuit_pattern, extracted_text)
+    proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+    return bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
+
+# Extract the first date, amount, and CUIT number if any are found
+def extract_details():
+    global bank, date, amount, payer, cuit, proof_number
+    
+    bank = bank_found[0] if bank_found else None
+    date = dates_found[0] if dates_found else None
+    amount = amounts_found[0] if amounts_found else None
+    proof_number = proof_number_found[0] if proof_number_found else None
+    
+    payer = payer_name_found[0] if payer_name_found else None
+    cuit = cuit_found[0] if cuit_found else None
+
 # Function to extract data from an image based on its content
 def extract_data_from_image(image_path):
-    global index
+    global index, extracted_text
     extracted_text = extract_image_to_text(image_path)
     lines = extracted_text.split('\n')
 
@@ -92,7 +118,7 @@ def extract_data_from_image(image_path):
 
         #'fo al' or 'foy' because it is not dectecting the CUenta DNI
         elif "fo al" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Cuenta DNI"
             # print(bank_name)
             break
@@ -166,7 +192,7 @@ def extract_data_from_image(image_path):
             break
 
     if bank_name == "Bancopatagonia":
-        global bank, date, amount, payer, cuit, proof_number
+        global bank, date, amount, payer, cuit, proof_number, bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern, bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
         
         bank_pattern = 'Bancopatagonia'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
@@ -175,19 +201,26 @@ def extract_data_from_image(image_path):
         payer_name_pattern = lines[11]
         cuit_pattern = 'None'  # MARTIN SAID Cuit IS FILLED MANUALLY
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
 
-        bank = bank_found[0] if bank_found else None
-        date = dates_found[0] if dates_found else None
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
+    
+        # bank = bank_found[0] if bank_found else None
+        # date = dates_found[0] if dates_found else None
+        # amount = amounts_found[1] if amounts_found else None
+        # payer = payer_name_found[0] if payer_name_found else None
+        # cuit = cuit_found[0] if cuit_found else None
+        # proof_number = proof_number_found[0] if proof_number_found else None
+
+        # Extract the first date, amount, and CUIT number if any are found
+        extract_details()
         amount = amounts_found[1] if amounts_found else None
-        payer = payer_name_found[0] if payer_name_found else None
-        cuit = cuit_found[0] if cuit_found else None
-        proof_number = proof_number_found[0] if proof_number_found else None
 
         # print(f"bank: {bank}")
         # print(f"date: {date}")
@@ -204,12 +237,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = lines[8]
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -241,12 +277,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = r'(?:de )?([A-Z][a-z]+(?: [A-Z][a-z]+)*)'
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -272,12 +311,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
         cuit_pattern = r'\b\d{11}\b' #MARTIN SAID Cuit IS FILLED MANUALLY 
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -302,12 +344,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
         cuit_pattern = 'None' #MARTIN SAID Cuit IS FILLED MANUALLY 
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -334,12 +379,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = lines_33
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -366,12 +414,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = line_24
         cuit_pattern = r'\b\d{11}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -418,12 +469,15 @@ def extract_data_from_image(image_path):
 
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -457,12 +511,15 @@ def extract_data_from_image(image_path):
 
         cuit_pattern = r'\b\d{11}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -493,12 +550,15 @@ def extract_data_from_image(image_path):
 
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -540,12 +600,15 @@ def extract_data_from_image(image_path):
 
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -576,12 +639,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = line_11
         cuit_pattern = r'\b\d{11}\b'  # MARTIN SAID Cuit IS FILLED MANUALLY
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -610,12 +676,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = "None"
         cuit_pattern = "None"  # MARTIN SAID Cuit IS FILLED MANUALLY
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = "HSBC"
         date = dates_found[0] if dates_found else None
@@ -662,12 +731,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = line_8
         cuit_pattern = "None"  # MARTIN SAID Cuit IS FILLED MANUALLY
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -692,12 +764,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = 'None' #MARTIN SAID NAME IS FILLED MANUALLY 
         cuit_pattern = 'None' #MARTIN SAID Cuit IS FILLED MANUALLY 
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
@@ -722,12 +797,15 @@ def extract_data_from_image(image_path):
         payer_name_pattern = lines_7  
         cuit_pattern = r'\b\d{11}\b'
 
-        bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
-        dates_found = re.findall(date_pattern, extracted_text)
-        amounts_found = re.findall(amount_pattern, extracted_text)
-        payer_name_found = re.findall(payer_name_pattern, extracted_text)
-        cuit_found = re.findall(cuit_pattern, extracted_text)
-        proof_number_found = re.findall(proof_number_pattern, extracted_text)
+        # bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+        # dates_found = re.findall(date_pattern, extracted_text)
+        # amounts_found = re.findall(amount_pattern, extracted_text)
+        # payer_name_found = re.findall(payer_name_pattern, extracted_text)
+        # cuit_found = re.findall(cuit_pattern, extracted_text)
+        # proof_number_found = re.findall(proof_number_pattern, extracted_text)
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
         # bank = bank_found[0] if bank_found else None
         bank = bank_pattern
@@ -755,6 +833,8 @@ def extract_data_from_image(image_path):
         'TITULAR': payer,
         'CUIT': cuit
     }
+
+   
 
 # Function to check if a cell is empty
 def is_empty(cell_value):
@@ -835,7 +915,7 @@ import subprocess
 import os
 
 # Open the file with LibreOffice in linux
-subprocess.run(['libreoffice', extracted_file_path])
+# subprocess.run(['libreoffice', extracted_file_path])
 
 # Open the file with Microsoft Excel in windows
 #os.system("start EXCEL.EXE extracted_info.xlsx")
