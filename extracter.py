@@ -267,7 +267,7 @@ def extract_data_from_image(image_path):
     elif bank_name == "Mercado pago":
         bank_pattern = 'Mercado pago'
         date_pattern = r'\b\d{1,2} de [a-z]+ \d{4}\b'
-        amount_pattern = r'\$\s*\d+\.?\d+' #r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'[\$¢]\s*\d[\d,\.]+' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{11}\b'
         payer_name_pattern = r'(?:de )?([A-Z][a-z]+(?: [A-Z][a-z]+)*)'
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
@@ -278,6 +278,7 @@ def extract_data_from_image(image_path):
         bank = bank_found[0] if bank_found else None
         date = dates_found[0] if dates_found else None
         amount = amounts_found[0] if amounts_found else None
+        amount = amount.replace('¢', '$')
         payer = payer_name_found[1] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
@@ -746,7 +747,7 @@ ws.append(total_sum_row)
 
 total_sum = sum(last_amt)
 # Append the total sum row to the Excel sheet
-total_sum_row = ['TOTAL', None, f'${total_sum}', None, None, None, None]
+total_sum_row = ['SUMA TOTAL', None, f'${total_sum}', None, None, None, None]
 ws.append(total_sum_row)
 
 from datetime import date
