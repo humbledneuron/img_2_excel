@@ -418,12 +418,12 @@ def extract_data_from_image(image_path):
 
     elif bank_name == "Naranja X":
 
-        if lines[0] == 'fod':
+        if lines[0] == 'fod' or lines[0] == 'Foy':
             #for date
             line_8 = lines[7]
             line_8 = re.sub(r'^\w+\s+\w+\s+\b|\b\s-\s\d{2}:\d{2}\s+h$', '', line_8) #|\b\s-\s\d{2}:\d{2}\s+h$
             #for extracting payer name
-            line_14 = lines[13] 
+            line_14 = lines[13]
 
         elif lines[0] == '<':
             #for date
@@ -441,7 +441,7 @@ def extract_data_from_image(image_path):
 
         bank_pattern = 'Naranja X'
         date_pattern = line_8
-        amount_pattern = r'\$\s*\d+\.?\d*'
+        amount_pattern = r'\$\s*\d+\.?\d*' 
         payer_name_pattern = line_14
         proof_number_pattern = r'\b\d{10}\b'
 
