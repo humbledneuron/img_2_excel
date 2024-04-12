@@ -1,0 +1,17 @@
+VAI Comprobante de transferencia
+vala
+
+Fecha y hora 13/01/2024 11:14 hs
+Monto debitado $68.400,00
+Cuenta destino Ink Tecno Srl
+CBU destino 0720810020000001214918
+CUIT destino 30718219961
+Nombre remitente Evelyn Macarena Jara Ulloa
+Concepto VAR
+Id Op. Z6OLMDN33VXY 1KXNE7RQ5X
+
+Alau Tecnologia S.A.U. (Uala) es un Proveedor de Servicios de Pago registrado ante el Banco Central de la
+Republica Argentina, se limita a ofrecer servicios de pago y no se encuentra autorizado a operar como
+entidad financiera. Los fondos depositados en cuentas de pago no constituyen depositos en una entidad
+financiera, ni estan garantizados conforme legislacion y reglamentaci6n aplicable a depdsitos en
+entidades financieras.

@@ -215,7 +215,11 @@ def extract_data_from_image(image_path):
         #     # print(bank_name)
         #     break
 
-    if bank_name == "Bancopatagonia":
+    if image_path in processed_files:
+        print(f'File {image_path} has already been processed. Skipping...')
+        return
+
+    elif bank_name == "Bancopatagonia":
         global bank, date, amount, payer, cuit, proof_number, bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern, bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
         
         bank_pattern = 'Bancopatagonia'
@@ -458,6 +462,7 @@ def extract_data_from_image(image_path):
         proof_number = proof_number_found[0] if proof_number_found else None
 
         # approved.append(image_path)
+    
 
     elif bank_name == "Banco Credicoop Coop. Ltdo":
 
