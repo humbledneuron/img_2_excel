@@ -267,7 +267,7 @@ def extract_data_from_image(image_path):
     elif bank_name == "Mercado pago":
         bank_pattern = 'Mercado pago'
         date_pattern = r'\b\d{1,2} de [a-z]+ \d{4}\b'
-        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d+\.?\d+' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{11}\b'
         payer_name_pattern = r'(?:de )?([A-Z][a-z]+(?: [A-Z][a-z]+)*)'
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
