@@ -1,5 +1,5 @@
 # hsbc -- new layout
-macro -- new layout
+# macro -- new layout
 mercado pago -- new 2 layouts
 # cuenta dni -- not detecting
 # naranja -- twice -- coz -- due to cuenta dni

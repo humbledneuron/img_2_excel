@@ -343,6 +343,7 @@ def extract_data_from_image(image_path):
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('¢', '$')
         amount = amount.replace('.', '')
+        amount = amount.split(',')[0]
         payer = payer_name_found[1] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
