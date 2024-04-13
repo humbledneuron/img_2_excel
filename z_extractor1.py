@@ -250,6 +250,8 @@ def extract_data_from_image(image_path):
             print(image_path)
             break
 
+        # else:
+            # move_to_undetected(image_path)
 
     if bank_name == "Bancopatagonia":
         global bank, date, amount, payer, cuit, proof_number, bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern, bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
@@ -725,7 +727,7 @@ def extract_data_from_image(image_path):
             #payer name
             lines_7 = lines[7]
             
-            proof_number_pattern = r'\b\d{6,8}\b'
+            proof_number_pattern = r'\b\d{6,8}\b' #6,8
             payer_name_pattern = lines_7  
 
         elif lines[0] == "f «' Cuenta":
@@ -761,13 +763,21 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # Check if both 6-digit and 8-digit proof numbers are present
+        # if any(len(p) == 6 for p in proof_number_found) and any(len(p) == 8 for p in proof_number_found):
+            # Extract the 6-digit proof number if both are present
+            # proof_number = next((p for p in proof_number_found if len(p) == 6), None)
+        # else:
+            # Extract the first found proof number (either 6-digit or 8-digit)
+            # proof_number = proof_number_found[0] if proof_number_found else None
+
         # approved.append(image_path)
 
         # approved.append(image_path)
     
-    # else:
-    #     # Move the image to the "undetected" folder
-    #     move_to_undetected(image_path)
+#    else:
+        # Move the image to the "undetected" folder
+#        move_to_undetected(image_path)
 
 
     # Return the extracted data
@@ -843,8 +853,10 @@ today = date.today()
 formatted_date = today.strftime("%d_%m_%Y")
 
 # Specify the path to the extracted file
-extracted_file_path = f'{formatted_date}_extracted_info.xlsx'
-extracted_file_path = os.path.join(folder_path, extracted_file_path) #'zz3.xlsx'
+extracted_file_path = os.path.join(folder_path, 'detected')
+os.makedirs(extracted_file_path, exist_ok=True)
+extracted_file_path = os.path.join(extracted_file_path, f'{formatted_date}_extracted_info.xlsx')
+
 
 # Save the Excel file
 wb.save(extracted_file_path)
