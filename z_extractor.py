@@ -236,32 +236,12 @@ def extract_data_from_image(image_path):
             print(image_path)
             break
 
-            #hsbc has two patterns, thats why this
         elif "xp" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
             print(line.lower())
             bank_name = "HSBC"
             print(bank_name)
             print(image_path)
             break
-        # elif "xp uss" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-        #     print(line.lower())
-        #     bank_name = "HSBC"
-        #     print(bank_name)
-        #     print(image_path)
-        #     break
-            """
-        elif "usec" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
-            bank_name = "HSBC"
-            print(bank_name)
-            print(image_path)
-            break """
-        elif "<p usec" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
-            bank_name = "HSBC"
-            print(bank_name)
-            print(image_path)
-            break        
 
         elif "uala" in line.lower(): 
             print(line.lower())
@@ -270,8 +250,6 @@ def extract_data_from_image(image_path):
             print(image_path)
             break
 
-        # else:
-            # move_to_undetected(image_path)
 
     if bank_name == "Bancopatagonia":
         global bank, date, amount, payer, cuit, proof_number, bank_pattern, date_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern, bank_found, dates_found, amounts_found, payer_name_found, cuit_found, proof_number_found
@@ -293,6 +271,8 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
     elif bank_name == "Galicia":
         bank_pattern = 'Galicia'
@@ -320,6 +300,8 @@ def extract_data_from_image(image_path):
             # Extract the first found proof number (either 9-digit or 11-digit)
             proof_number = proof_number_found[0] if proof_number_found else None
 
+        # approved.append(image_path)
+
     elif bank_name == "Mercado pago":
         bank_pattern = 'Mercado pago'
         date_pattern = r'\b\d{1,2} de [a-z]+ \d{4}\b'
@@ -339,6 +321,8 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[1] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
    # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "BNA":
@@ -360,6 +344,8 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None 
 
+        # approved.append(image_path)
+
     # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "SUPERVIELLE":
         bank_pattern = 'SUPERVIELLE'
@@ -379,6 +365,8 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
     elif bank_name == "BancoCiudad":
 
@@ -402,6 +390,8 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[1] if cuit_found else None
         proof_number = proof_number_found[1] if proof_number_found else None
 
+        # approved.append(image_path)
+
     elif bank_name == "Banco Santa Fe":
 
         line_24 = lines[24] 
@@ -423,6 +413,8 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
     elif bank_name == "BBVA":
 
@@ -466,6 +458,8 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = line_3
 
+        # approved.append(image_path)
+
     elif bank_name == "Naranja X":
 
         if lines[0] == 'fod': #or lines[0] == 'Foy':
@@ -489,6 +483,13 @@ def extract_data_from_image(image_path):
             #for extracting payer name
             line_14 = lines[12]
 
+        #else:
+        #    #for date
+        #    line_8 = lines[8]
+        #    line_8 = re.sub(r'^\w+\s+\w+\s+\b|\b\s-\s\d{2}:\d{2}\s+h$', '', line_8)
+        #    #for extracting payer name
+        #    line_14 = lines[14] 
+
         bank_pattern = 'Naranja X'
         date_pattern = line_8
         amount_pattern = r'\$\s*\d+\.?\d*' 
@@ -507,6 +508,8 @@ def extract_data_from_image(image_path):
         payer = line_14 #payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
     elif bank_name == "Banco Credicoop Coop. Ltdo":
 
@@ -529,6 +532,8 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
     elif bank_name == "Personal Pay":
 
@@ -567,7 +572,8 @@ def extract_data_from_image(image_path):
         # else: 
         #     print("the second format of Personal Pay can't be detected")
 
-       
+        # approved.append(image_path)
+        
     elif bank_name == "Bancor":
 
         #for proof number
@@ -594,57 +600,34 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # approved.append(image_path)
+
     elif bank_name == "HSBC":
 
+        #for payer name
+        line_11 = lines[11]
+        line_11 = re.sub(r'^\w+:+\s+\b', '', line_11)
 
-        if lines[0] == '<p usec':
-                    #for payer name
-            line_11 = lines[4]
-            # line_11 = re.sub(r'^\w+\s+:+\s+\b', '', line_11)
-            line_11 = re.sub(r'Razén Social: ', '', line_11)
+        bank_pattern = 'HSBC' #'usec' #HSBC is detected as that
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
+        proof_number_pattern = r'\b\d{4}\b'
+        payer_name_pattern = "None"
+        cuit_pattern = "None"  # MARTIN SAID Cuit IS FILLED MANUALLY
 
-            bank_pattern = 'HSBC' #'usec' #HSBC is detected as that
-            date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-            amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
-            proof_number_pattern = r'\b\d{8}\b'
-            payer_name_pattern = line_11
-            cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
 
-            # Extract information using the regEx patterns
-            details_regEx_patterns()
+        bank = "HSBC"
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[0] if amounts_found else None
+        amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
+        amount = amount.replace('.', '')
+        payer = payer_name_found[0] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[1] if proof_number_found else None
 
-            bank = "HSBC"
-            date = dates_found[0] if dates_found else None
-            amount = amounts_found[1] if amounts_found else None
-            amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
-            amount = amount.split('.')[0] #amount.replace('.', '')
-            payer = payer_name_found[0] if payer_name_found else None
-            cuit = cuit_found[0] if cuit_found else None
-            proof_number = proof_number_found[2] if proof_number_found else None        
-        
-        else:
-            #for payer name
-            # line_11 = lines[11]
-            # line_11 = re.sub(r'^\w+:+\s+\b', '', line_11)
-
-            bank_pattern = 'HSBC' #'usec' #HSBC is detected as that
-            date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-            amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
-            proof_number_pattern = r'\b\d{4}\b'
-            payer_name_pattern = "None"
-            cuit_pattern = "None"  # MARTIN SAID Cuit IS FILLED MANUALLY
-
-            # Extract information using the regEx patterns
-            details_regEx_patterns()
-
-            bank = "HSBC"
-            date = dates_found[0] if dates_found else None
-            amount = amounts_found[0] if amounts_found else None
-            amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
-            amount = amount.replace('.', '')
-            payer = payer_name_found[0] if payer_name_found else None
-            cuit = cuit_found[0] if cuit_found else None
-            proof_number = proof_number_found[1] if proof_number_found else None
+        # approved.append(image_path)
 
     elif bank_name == "Uala":
 
@@ -708,6 +691,8 @@ def extract_data_from_image(image_path):
             cuit = cuit_found[0] if cuit_found else None
             proof_number = proof_number_found[0] if proof_number_found else None
 
+        # approved.append(image_path)
+
     elif bank_name == "Santander":
         bank_pattern = 'Santander'
         date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
@@ -726,6 +711,8 @@ def extract_data_from_image(image_path):
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
+
+        # approved.append(image_path)
 
     elif bank_name == "Cuenta DNI":
 
@@ -774,6 +761,15 @@ def extract_data_from_image(image_path):
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None
 
+        # approved.append(image_path)
+
+        # approved.append(image_path)
+    
+    # else:
+    #     # Move the image to the "undetected" folder
+    #     move_to_undetected(image_path)
+
+
     # Return the extracted data
     return {
         'BANCO': bank_name,
@@ -783,6 +779,7 @@ def extract_data_from_image(image_path):
         'TITULAR': payer,
         'CUIT': cuit
     }
+    # move_undetected_images(folder_path, undetected_folder)
 
 # Function to check if a cell is empty
 def is_empty(cell_value):
@@ -846,10 +843,8 @@ today = date.today()
 formatted_date = today.strftime("%d_%m_%Y")
 
 # Specify the path to the extracted file
-extracted_file_path = os.path.join(folder_path, 'detected')
-os.makedirs(extracted_file_path, exist_ok=True)
-extracted_file_path = os.path.join(extracted_file_path, f'{formatted_date}_extracted_info.xlsx')
-
+extracted_file_path = f'{formatted_date}_extracted_info.xlsx'
+extracted_file_path = os.path.join(folder_path, extracted_file_path) #'zz3.xlsx'
 
 # Save the Excel file
 wb.save(extracted_file_path)

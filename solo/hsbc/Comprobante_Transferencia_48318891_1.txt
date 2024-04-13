@@ -1,0 +1,24 @@
+<p usec
+
+Comprobante de Instruccién de Pago
+
+Razén Social: RIVIERA AZUL EMPRESA DE VIAJES Y
+CUIT Originante: 33-71684043-9
+
+Cuenta origen: CC ARS 6603246872
+
+Importe: ARS 140000.00
+
+Razén Social Destino: INK TECNO SRL
+
+CUIT destino: 30-71821996-1
+
+Cuenta destino: 0720810020000001214918
+
+Numero de lote: 48318891
+
+Fecha de ejecucién: 18/01/2024 10:45:25
+
+Esta operacién ha sido realizada a través de Online Banking
+Empresas de HSBC
+
