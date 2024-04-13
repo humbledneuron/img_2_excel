@@ -270,6 +270,13 @@ def extract_data_from_image(image_path):
             print(image_path)
             break
 
+        elif "macro" in line.lower(): 
+            print(line.lower())
+            bank_name = "Macro" 
+            print(bank_name)
+            print(image_path)
+            break
+
         # else:
             # move_to_undetected(image_path)
 
@@ -770,6 +777,51 @@ def extract_data_from_image(image_path):
         date = dates_found[0] if dates_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
+        payer = payer_name_found[0] if payer_name_found else None
+        cuit = cuit_found[0] if cuit_found else None
+        proof_number = proof_number_found[0] if proof_number_found else None
+
+    elif bank_name == "Macro":
+
+        """if lines[0] == 'fa Macro':
+
+            bank_pattern = 'Macro' #'usec' #HSBC is detected as that
+            date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+            amount_pattern =  r'\b\d+\.?\d*'
+            proof_number_pattern = 'None' # r'\b\d{8}\b'
+            payer_name_pattern = 'None'
+            cuit_pattern =  'None' #r'\b\d{2}-\d{8}-\d{1}\b'
+
+            # Extract information using the regEx patterns
+            details_regEx_patterns()
+
+            bank = bank_found[0] if bank_found else None
+            date = dates_found[0] if dates_found else None
+            amount = amounts_found[0] if amounts_found else None
+            amount = "$ " + amount #amount.replace('ARS', '$ ') #replaces '$' with '$ '
+            amount = amount.split('.')[0] #amount.replace('.', '')
+            payer = payer_name_found[0] if payer_name_found else None
+            cuit = cuit_found[0] if cuit_found else None
+            proof_number = proof_number_found[0] if proof_number_found else None        
+        
+        else:"""
+            #for payer name
+        line_14 = lines[14]
+        
+        bank_pattern = 'Macro' #'usec' #HSBC is detected as that
+        date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
+        amount_pattern =  r'\$\s*\d+\,?\d*' 
+        #r'\$\s*\d[\d,]*' #r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
+        proof_number_pattern = r'\b\d{9}\b'
+        payer_name_pattern = line_14
+        cuit_pattern = r"\b\d{11}\b"
+
+        # Extract information using the regEx patterns
+        details_regEx_patterns()
+        bank = "Macro"
+        date = dates_found[0] if dates_found else None
+        amount = amounts_found[1] if amounts_found else None
+        amount = re.sub(',', '', amount) #amount.replace(',', '')
         payer = payer_name_found[0] if payer_name_found else None
         cuit = cuit_found[0] if cuit_found else None
         proof_number = proof_number_found[0] if proof_number_found else None

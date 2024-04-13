@@ -1,4 +1,4 @@
-hsbc -- new layout
+# hsbc -- new layout
 macro -- new layout
 mercado pago -- new 2 layouts
 # cuenta dni -- not detecting
