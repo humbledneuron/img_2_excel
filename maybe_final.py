@@ -814,7 +814,7 @@ def extract_data_from_image(image_path):
         #r'\$\s*\d[\d,]*' #r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{9}\b'
         payer_name_pattern = line_14
-        cuit_pattern = r"\b\d{11}\b"
+        cuit_pattern = "None" #because it's not detecting correctly #r"\b\d{11}\b"
 
         # Extract information using the regEx patterns
         details_regEx_patterns()
