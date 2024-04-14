@@ -447,7 +447,7 @@ def extract_data_from_image(image_path):
             line_12 = lines[7]
             line_12 = re.sub(r'\b,00+$', '', line_12)
 
-            bank_pattern = 'Banco Santa Fe'
+            bank_pattern = 'BBVA'
             date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             #something is wrong here
             amount_pattern = line_12
@@ -477,7 +477,7 @@ def extract_data_from_image(image_path):
             line_12 = re.sub(r'\b,00+$', '', line_12)
 
 
-            bank_pattern = 'Banco Santa Fe'
+            bank_pattern = 'BBVA'
             date_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             #something is wrong here
             amount_pattern = line_12
