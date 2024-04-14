@@ -8,14 +8,14 @@
 *.pdf
 
 #myenv/
-makeups/
-not_supported/
-not_supported_formats/
-pdfs_testing/
-undected/
-z_success/
-zource/
-solo/
+makeups/*
+not_supported/*
+not_supported_formats/*
+pdfs_testing/*
+undetected/*
+z_success/*
+zource/*
+solo/*
 
 appending_xl.py
 gagan_anna_img_2_excel.ipynb
