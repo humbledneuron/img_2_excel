@@ -8,7 +8,7 @@ import cv2
 import pytesseract
 import re
 from decimal import Decimal
-from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
+from PyQt5.QtWidgets import QApplication, QFileDialog
 
 # Global variables
 index = 1
@@ -898,4 +898,4 @@ extracted_file_path = os.path.join(extracted_file_path, f'{formatted_date}_extra
 wb.save(extracted_file_path)
 
 
-subprocess.run(['libreoffice', extracted_file_path])
+# subprocess.run(['libreoffice', extracted_file_path])
