@@ -936,4 +936,4 @@ extracted_file_path = os.path.join(extracted_file_path, f'{formatted_date}_extra
 wb.save(extracted_file_path)
 
 
-subprocess.run(['libreoffice', extracted_file_path])
+# subprocess.run(['libreoffice', extracted_file_path])
