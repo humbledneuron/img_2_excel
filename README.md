@@ -14,7 +14,9 @@ source myenv/bin/activate -->
 
 # run the below, before installing the program
  
-pip install opencv-python pytesseract pandas numpy pillow openpyxl pdf2image pyqt5
+pip install opencv-python pytesseract pillow openpyxl pdf2image 
+# pandas numpy
+# pyqt5
 
 <!-- pip install pandas
 pip install numpy
