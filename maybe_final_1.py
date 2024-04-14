@@ -48,14 +48,20 @@ def pdf_to_image(pdf_folder_path):
     for pdf_file in pdf_files:
         # Construct the file paths
         pdf_file_path = os.path.join(pdf_folder_path, pdf_file)
-        image_file_path = os.path.join(pdf_folder_path, os.path.splitext(pdf_file)[0] + '.png')
+        
+        #if this is here it will overwrite the previous images
+        # image_file_path = os.path.join(pdf_folder_path, os.path.splitext(pdf_file)[0] + '.png')
     
         # Convert PDF to list of PIL images
-        images = convert_from_path(pdf_file_path)
+        images = convert_from_path(pdf_file_path, first_page=1, last_page=1)
     
+        image_file_path = os.path.join(pdf_folder_path, f"{os.path.splitext(pdf_file)[0]}_page1.png")
+        images[0].save(image_file_path, 'PNG')
+
+        # this overwrite aswell
         # Save each page of the PDF as an image file
-        for i, image in enumerate(images):
-            image.save(image_file_path, 'PNG')
+        # for i, image in enumerate(images):
+            # image.save(image_file_path, 'PNG')
     
     print('PDFs converted to images successfully.')
 
