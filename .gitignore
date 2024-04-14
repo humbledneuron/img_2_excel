@@ -3,6 +3,8 @@
 *.xls
 *.xls#
 
+*.ipynb
+
 *.pdf
 
 #myenv/
@@ -13,8 +15,9 @@ pdfs_testing/
 undected/
 z_success/
 zource/
+solo/
 
-appeending_xl.py
+appending_xl.py
 gagan_anna_img_2_excel.ipynb
 img_2_excel_testing_version.ipynb
 
