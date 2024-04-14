@@ -9,7 +9,7 @@ import pytesseract
 import re
 from decimal import Decimal
 # from PyQt5.QtWidgets import QApplication, QFileDialog
-from tkinter import Tk
+from tkinter import Tk, Label, Button
 from tkinter.filedialog import askdirectory
 
 
@@ -28,6 +28,7 @@ def selectFolder():
 selectFolder()
 """
 
+#printed in console
 # Create a Tkinter root window
 root = Tk()
 
@@ -39,6 +40,31 @@ folder_path = askdirectory()
 
 # Print the selected folder path
 print("Selected folder:", folder_path)
+
+
+
+"""#gui select and show the selected folder
+# Create a Tkinter root window
+root = Tk()
+    
+# Hide the root window
+root.withdraw()
+    
+# Initialize
+folder_path = askdirectory()
+    
+# Create a new window to display the selected folder path
+window = Tk()
+window.title("Selected Folder Path")
+    
+# Create a label to display the folder path
+label = Label(window, text="Selected folder: " + folder_path)
+label.pack()
+    
+# Create a button to close the window
+button = Button(window, text="Close", command=window.destroy)
+button.pack()"""
+    
 
 #sends the non detected images to the undetected folder in the source
 undetected_folder = os.path.join(folder_path, undetected_folder)
@@ -124,163 +150,163 @@ def extract_data_from_image(image_path):
     bank_name = None
     for line in lines:
         if "bancopatagonia" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Bancopatagonia"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
         elif "galicia" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Galicia"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
         elif "mercado pago" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Mercado pago"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
         
          #santander is in many banks, thats why this
         elif "«> santander" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "ANS" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break                        
         elif "® santander" in line.lower(): #santander is in many banks, thats why this
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         # #'fo al' or 'foy' because it is not dectecting the CUenta DNI
         elif "fo al" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
         elif "f «' cuenta" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
         elif "f -| cuenta" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
         elif "fm «' cuenta" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
 
             # hold this becauze it has the 'Santander' word in the middle of the text
         elif "bna" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "BNA"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
             # hold this becauze it has the 'Santander' word in the middle of the text
         elif "supervielle" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "SUPERVIELLE"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "bancociudad" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "BancoCiudad"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "banco santa fe" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Banco Santa Fe"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "bbva" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "BBVA"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "naranja x" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Naranja X"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "banco credicoop coop. ltdo" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Banco Credicoop Coop. Ltdo"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "personal pay" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Personal Pay"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "bancor" in line.lower():
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Bancor"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
             #hsbc has two patterns, thats why this
         elif "xp" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
+            # print(line.lower())
             bank_name = "HSBC"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "<p usec" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
+            # print(line.lower())
             bank_name = "HSBC"
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break        
 
         elif "uala" in line.lower(): 
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Uala" 
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
         elif "macro" in line.lower(): 
-            print(line.lower())
+            # print(line.lower())
             bank_name = "Macro" 
-            print(bank_name)
+            # print(bank_name)
             print(image_path)
             break
 
@@ -915,4 +941,13 @@ extracted_file_path = os.path.join(extracted_file_path, f'{formatted_date}_extra
 wb.save(extracted_file_path)
 
 
-# subprocess.run(['libreoffice', extracted_file_path])
+print(f"Excel file saved at: {extracted_file_path}")
+
+import subprocess #for linux
+import os #for windows
+
+# Open the file with LibreOffice in linux
+#subprocess.run(['libreoffice', extracted_file_path])
+
+# Open the file with Microsoft Excel in windows
+os.system(f"start EXCEL.EXE {extracted_file_path}")
