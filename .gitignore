@@ -3,7 +3,7 @@
 *.xls
 *.xls#
 
-*.pdf
+#*.pdf
 
 myenv/
 
