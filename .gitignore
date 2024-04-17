@@ -15,3 +15,6 @@ output.xlsx
 
 
 .~lock.output.xlsx#
+
+build/
+ticket_details_extracter.spec

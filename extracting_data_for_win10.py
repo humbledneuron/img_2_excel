@@ -1,6 +1,6 @@
 #this runs good but have to run the program twice to get the correct output
 
-import os, shutil, subprocess
+import os, shutil
 from openpyxl import Workbook
 from pdf2image import convert_from_path
 from openpyxl.styles import Font, Alignment, PatternFill

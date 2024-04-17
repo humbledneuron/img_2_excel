@@ -11,7 +11,6 @@
 <!-- python3 -m venv myenv
 source myenv/bin/activate -->
 
-
 # run the below, before installing the program
 
 python3 -m venv myenv source myenv/bin/activate
