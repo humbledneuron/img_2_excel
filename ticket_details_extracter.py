@@ -1,6 +1,4 @@
-#this runs good but have to run the program twice to get the correct output
-
-import os, shutil
+import os, shutil, time, msvcrt
 from openpyxl import Workbook
 from pdf2image import convert_from_path
 from openpyxl.styles import Font, Alignment, PatternFill
@@ -8,9 +6,9 @@ import cv2
 import pytesseract
 import re
 from decimal import Decimal
-#from PyQt5.QtWidgets import QApplication, QFileDialog
 from tkinter import Tk, Label, Button
 from tkinter.filedialog import askdirectory
+import tkinter  as tk
 
 # Global variables
 index = 1
@@ -19,28 +17,35 @@ folder_path = ''
 undetected_folder = 'undetected'
 processed_files = set()
 
-#printed in console
+#opens a window to select the folder
 # Create a Tkinter root window
 root = Tk()
-
 # Hide the root window
 root.withdraw()
-
 # Initialize
 folder_path = askdirectory()
-# files_to_exist = askopenfilename()
-
 # Print the selected folder path
+print(' ')#this prints nothing
 print("Selected folder:", folder_path)
+print(' ')#this prints nothing
 
+print("please look out a pop window...")
+print('')
 #sends the non detected images to the undetected folder in the source
 undetected_folder = os.path.join(folder_path, undetected_folder)
 
+#developer contact address
+print("for any issues or future bulk bank extraction updates, please reach us out here...    ", end='')
+for char in ['b','l','o','g','g','e','r','.','t','h','o','m','a','s','j','e','r','r','y','@','g','m','a','i','l','.','c','o','m','(Bhanuprakash)']:
+    print(char, end='')
+    time.sleep(0.1)
+print(" ")
+print(" ")
 
 # Create Excel workbook
 wb = Workbook()
 ws = wb.active
-ws.title = "Extracted Data"
+ws.title = "Tickets Extracted Data"
 
 # Add headers to Excel sheet
 headers = ['Serie', 'FECHA', 'IMPORTE', 'NRO COMPROBANTE', 'TITULAR', 'CUIT', 'BANCO']
@@ -62,6 +67,16 @@ def pdf_to_image(pdf_folder_path):
 
     pdf_files = [file for file in os.listdir(pdf_folder_path) if file.endswith('.pdf')]
     
+    time.sleep(1)
+    
+    # print("converting the PDFs into images...")
+    print(' ')
+    for char in ['c','o','n','v','e','r','t','i','n','g',' ','t','h','e',' ','P','D','F','s',' ','i','n','t','o',' ','i','m','a','g','e','s','.','.','.']:
+        print(char, end="")
+        time.sleep(0.1)
+    print()
+    print(' ')
+
     # Convert each PDF file to images
     for pdf_file in pdf_files:
         # Construct the file paths
@@ -74,12 +89,6 @@ def pdf_to_image(pdf_folder_path):
         images[0].save(image_file_path, 'PNG')
 
         print(f'Saved {image_file_path}')
-    
-    print('PDFs converted to images successfully.')
-
-#####Emergency only ##### specify the path of the tesseract
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
 
 # Function to extract text from an image using Tesseract OCR
 def extract_image_to_text(image_path):
@@ -90,16 +99,14 @@ def extract_image_to_text(image_path):
 
 #regEx patterns
 def details_regEx_patterns():
-    global bank_pattern, dated_pattern, amount_pattern, payer_name_pattern, cuit_pattern, proof_number_pattern, extracted_text, bank_found, dateds_found, amounts_found, payer_name_found, cuit_found, proof_number_found
-
-    bank_found = re.findall(bank_pattern, extracted_text, re.IGNORECASE)
+    global  dated_pattern, amount_pattern, payer_name_pattern, cuit_pattern, proof_number_pattern, extracted_text, bank_found, dateds_found, amounts_found, payer_name_found, cuit_found, proof_number_found
     dateds_found = re.findall(dated_pattern, extracted_text)
     amounts_found = re.findall(amount_pattern, extracted_text)
     payer_name_found = re.findall(payer_name_pattern , extracted_text)
     cuit_found = re.findall(cuit_pattern, extracted_text)
     proof_number_found = re.findall(proof_number_pattern, extracted_text)
-
-    return bank_found, dateds_found, amounts_found, payer_name_found, cuit_found, proof_number_found
+    
+    return  dateds_found, amounts_found, payer_name_found, cuit_found, proof_number_found
 
 # Function to move undetected images to a separate folder
 def move_to_undetected(image_path, folder_path):
@@ -128,211 +135,137 @@ def extract_data_from_image(image_path):
 
     for line in lines:
         if "bancopatagonia" in line.lower():
-            print(line.lower())
             bank_name = "Bancopatagonia"
-            print(bank_name)
             print(image_path)
             break
         elif "galicia" in line.lower():
-            print(line.lower())
             bank_name = "Galicia"
-            print(bank_name)
             print(image_path)
             break
         elif "mercado pago" in line.lower():
-            print(line.lower())
             bank_name = "Mercado pago"
-            print(bank_name)
             print(image_path)
             break
         
          #santander is in many banks, thats why this
-        
         elif "�> santander" in line.lower():
-            print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
             print(image_path)
             break
         elif "«> santander" in line.lower():
-            print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
             print(image_path)
             break
         elif "�>" in line.lower():
-            print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
             print(image_path)
             break                        
         elif "® santander" in line.lower(): #santander is in many banks, thats why this
-            print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
             print(image_path)
             break
         elif "AS x" in line.lower():
-            print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
             print(image_path)
             break   
         elif "> santander" in line.lower():
-            print(line.lower())
             bank_name = "Santander"
-            print(bank_name)
             print(image_path)
             break
 
-        # #'fo al' or 'foy' because it is not dectecting the CUenta DNI
-        # elif "fo al" in line.lower():
-            """
-            elif "f �.' cuenta" in line.lower():
-            print(line.lower())
-            bank_name = "Cuenta DNI"
-            print(bank_name)
-            print(image_path)
-            break"""
-        # elif "f «' cuenta" in line.lower():
-        # elif "f �' Cuenta" in line.lower():
+        #because it is not dectecting the CUenta DNI in same line
         elif '"4 dni' in line.lower():
-            print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
             print(image_path)
             break
-        # elif "f -| cuenta" in line.lower():
-            """elif "f -) cuenta" in line.lower():
-            print(line.lower())
-            bank_name = "Cuenta DNI"
-            print(bank_name)
-            print(image_path)
-            break"""
-        # elif "fm «' cuenta" in line.lower():
-        # elif "f �.' cuenta" in line.lower():
         elif "v4 dni" in line.lower():         
-            print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
             print(image_path)
             break
         elif "4 dni" in line.lower():         
-            print(line.lower())
             bank_name = "Cuenta DNI"
-            print(bank_name)
             print(image_path)
             break
 
 
-        # hold this becauze it has the 'Santander' word in the middle of the text
+        # hold this becauze sometimes it has the 'Santander' word in the middle of the banks name
         elif "bna" in line.lower():
-            print(line.lower())
             bank_name = "BNA"
-            print(bank_name)
             print(image_path)
             break
 
-            # hold this becauze it has the 'Santander' word in the middle of the text
+        # hold this becauze sometimes it has the 'Santander' word in the middle of the banks name
         elif "supervielle" in line.lower():
-            print(line.lower())
             bank_name = "SUPERVIELLE"
-            print(bank_name)
             print(image_path)
             break
 
         elif "bancociudad" in line.lower():
-            print(line.lower())
             bank_name = "BancoCiudad"
-            print(bank_name)
             print(image_path)
             break
 
         elif "banco santa fe" in line.lower():
-            print(line.lower())
             bank_name = "Banco Santa Fe"
-            print(bank_name)
             print(image_path)
             break
 
         elif "bbva" in line.lower():
-            print(line.lower())
             bank_name = "BBVA"
-            print(bank_name)
             print(image_path)
             break
 
         elif "naranja x" in line.lower():
-            print(line.lower())
             bank_name = "Naranja X"
-            print(bank_name)
             print(image_path)
             break
 
         elif "banco credicoop coop. ltdo" in line.lower():
-            print(line.lower())
             bank_name = "Banco Credicoop Coop. Ltdo"
-            print(bank_name)
             print(image_path)
             break
 
         elif "personal pay" in line.lower(): #€
             lines[0] == 'personal pay'
-            print(line.lower())
             bank_name = "Personal Pay"
-            print(bank_name)
             print(image_path)
             break
 
         elif "bancor" in line.lower():
-            print(line.lower())
             bank_name = "Bancor"
-            print(bank_name)
             print(image_path)
             break
 
             #hsbc has two patterns, thats why this
         elif "xp" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
             bank_name = "HSBC"
-            print(bank_name)
             print(image_path)
             break
-
         elif "xp usec" in line.lower(): # or 'xp uss' 'ars' coz #HSBC is not detected correctly either "xp" as bank symbol and "ARS" as currency
-            print(line.lower())
             bank_name = "HSBC"
-            print(bank_name)
             print(image_path)
             break        
 
         elif "uala" in line.lower(): 
-            print(line.lower())
             bank_name = "Uala" 
-            print(bank_name)
             print(image_path)
             break
         
         #some times for uala, U is v in detection 
         elif "vala" in line.lower(): 
-            print(line.lower())
             bank_name = "Uala" 
-            print(bank_name)
             print(image_path)
             break
 
         elif "macro" in line.lower(): 
-            print(line.lower())
             bank_name = "Macro" 
-            print(bank_name)
             print(image_path)
             break
 
 
     if bank_name == "Bancopatagonia":
-        global bank, bank_pattern, dated_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern, bank_found, dateds_found, amounts_found, payer_name_found, cuit_found, proof_number_found
-        #dated, amount, payer, cuit, proof_number
-        bank_pattern = 'Bancopatagonia'
+        global bank,  dated_pattern, amount_pattern, proof_number_pattern, payer_name_pattern, cuit_pattern, bank_found, dateds_found, amounts_found, payer_name_found, cuit_found, proof_number_found
+        #dated, amount, payer, cuit, proof_number #bank_pattern,
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{10}\b'
@@ -342,7 +275,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
     
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[1] if amounts_found else None
         amount = amount.replace('.', '')
@@ -351,9 +283,8 @@ def extract_data_from_image(image_path):
         proof_number = proof_number_found[0] if proof_number_found else None
 
     elif bank_name == "Galicia":
-        bank_pattern = 'Galicia'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-        amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
+        amount_pattern = r'\$\s*\d[\d,\.,\d,\.]*' #r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{9,11}\b'
         payer_name_pattern = lines[8]
         cuit_pattern = r'\b\d{2}-\d{8}-\d{1}\b'
@@ -361,7 +292,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -378,7 +308,6 @@ def extract_data_from_image(image_path):
 
 #one error
     elif bank_name == "Mercado pago":
-        bank_pattern = 'Mercado pago'
         dated_pattern = r'\b\d{1,2} de [a-z]+ \d{4}\b'
         amount_pattern = r'[\$¢]\s*\d[\d,\.]+' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{11}\b'
@@ -388,7 +317,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('¢', '$')
@@ -400,7 +328,6 @@ def extract_data_from_image(image_path):
 
    # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "BNA":
-        bank_pattern = 'BNA'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
@@ -410,7 +337,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -420,7 +346,6 @@ def extract_data_from_image(image_path):
 
     # hold this becauze it has the 'Santander' word in the middle of the text
     elif bank_name == "SUPERVIELLE":
-        bank_pattern = 'SUPERVIELLE'
         dated_pattern = r'\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{4}\b'
@@ -430,7 +355,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -442,7 +366,6 @@ def extract_data_from_image(image_path):
 
         lines_33 = lines[34] + lines[35]
 
-        bank_pattern = 'BancoCiudad'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
@@ -452,7 +375,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -464,7 +386,6 @@ def extract_data_from_image(image_path):
 
         line_24 = lines[24] 
 
-        bank_pattern = 'Banco Santa Fe'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
@@ -474,7 +395,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -498,9 +418,8 @@ def extract_data_from_image(image_path):
             # line_12 = re.sub(r'\b,00+$', '', line_12)
             line_12 = line_12.split(',')[0]
 
-            bank_pattern = 'BBVA'
+            #bank_pattern = 'BBVA'
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-            #something is wrong here
             amount_pattern = line_12
             payer_name_pattern = line_4
             proof_number_pattern = line_3
@@ -528,7 +447,7 @@ def extract_data_from_image(image_path):
             line_12 = re.sub(r'\b,00+$', '', line_12)
 
 
-            bank_pattern = 'BBVA'
+            #bank_pattern = 'BBVA'
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             #something is wrong here
             amount_pattern = line_12
@@ -540,7 +459,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = line_12
         amount = amount.replace('.', '')
@@ -551,28 +469,17 @@ def extract_data_from_image(image_path):
     elif bank_name == "Naranja X":
 
         if lines[0] == 'fod': #or lines[0] == 'Foy':
-            #for dated
-            # line_8 = lines[7]
-            # line_8 = re.sub(r'^\w+\s+\w+\s+\b|\b\s-\s\d{2}:\d{2}\s+h$', '', line_8) #|\b\s-\s\d{2}:\d{2}\s+h$
             #for extracting payer name
             line_14 = lines[13]
 
         elif lines[0] == 'Foy':
-            #for dated
-            # line_8 = lines[8]
-            # line_8 = re.sub(r'^\w+\s+\w+\s+\b|\b\s-\s\d{2}:\d{2}\s+h$', '', line_8)
             #for extracting payer name
             line_14 = lines[14]
 
         elif lines[0] == '<':
-            #for dated
-            # line_8 = lines[5]
-            # line_8 = re.sub(r'^\w+\s+\w+\s+\b|\b\s-\s\d{2}:\d{2}\s+h$', '', line_8) #|\b\s-\s\d{2}:\d{2}\s+h$
             #for extracting payer name
             line_14 = lines[12]
 
-        bank_pattern = 'Naranja X'
-        # dated_pattern = line_8
         dated_pattern = r'\b\d{1,2}\/+[A-Za-z]+\/+\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' 
         payer_name_pattern = line_14
@@ -583,7 +490,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None#line_8 
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -593,7 +499,6 @@ def extract_data_from_image(image_path):
 
     elif bank_name == "Banco Credicoop Coop. Ltdo":
 
-        bank_pattern = 'Banco Credicoop Coop. Ltdo' #line_2
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         payer_name_pattern = 'None'
@@ -604,7 +509,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[1] if amounts_found else None
         amount = amount.replace('$', '$ ')
@@ -632,7 +536,6 @@ def extract_data_from_image(image_path):
             line_28 = lines[28]
 
 
-            bank_pattern = 'Personal Pay'
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             amount_pattern = line_4
             payer_name_pattern = line_28
@@ -642,15 +545,12 @@ def extract_data_from_image(image_path):
             # Extract information using the regEx patterns
             details_regEx_patterns()
 
-            bank = bank_found[0] if bank_found else None
             dated = dateds_found[0] if dateds_found else None
             amount = line_4
             amount = amount.replace('.', '')
             payer = line_28
             cuit = cuit_found[0] if cuit_found else None
             proof_number = line_40
-        #else: 
-            #print(f"the {image_path} can't be detected")
        
     elif bank_name == "Bancor":
 
@@ -660,7 +560,6 @@ def extract_data_from_image(image_path):
         line_11 = lines[11]
         line_11 = re.sub(r'^\w+:+\s+\b', '', line_11)
 
-        bank_pattern = 'Bancor'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = line_3
@@ -670,7 +569,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[1] if amounts_found else None
         amount = amount.replace('.', '')
@@ -687,7 +585,6 @@ def extract_data_from_image(image_path):
             line_11 = re.sub(r'^.*?\s*:\s*', '', line_11)
             # line_11 = re.sub(r'Razén Social: ', '', line_11)
 
-            bank_pattern = 'HSBC' #'usec' #HSBC is detected as that
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
             proof_number_pattern = r'\b\d{8}\b'
@@ -697,21 +594,16 @@ def extract_data_from_image(image_path):
             # Extract information using the regEx patterns
             details_regEx_patterns()
 
-            bank = "HSBC"
             dated = dateds_found[0] if dateds_found else None
             amount = amounts_found[1] if amounts_found else None
-            amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
+            amount = amount.replace('ARS', '$ ') #replaces 'ARS' with '$ '
             amount = amount.split('.')[0] #amount.replace('.', '')
             payer = payer_name_found[0] if payer_name_found else None
             cuit = cuit_found[0] if cuit_found else None
             proof_number = proof_number_found[2] if proof_number_found else None        
         
         else:
-            #for payer name
-            # line_11 = lines[11]
-            # line_11 = re.sub(r'^\w+:+\s+\b', '', line_11)
 
-            bank_pattern = 'HSBC' #'usec' #HSBC is detected as that
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             amount_pattern =  r'\bARS\s*\d+\.?\d*'  # have to Replace ARS with $
             proof_number_pattern = r'\b\d{4}\b'
@@ -721,7 +613,6 @@ def extract_data_from_image(image_path):
             # Extract information using the regEx patterns
             details_regEx_patterns()
 
-            bank = "HSBC"
             dated = dateds_found[0] if dateds_found else None
             amount = amounts_found[0] if amounts_found else None
             amount = amount.replace('ARS', '$ ') #replaces '$' with '$ '
@@ -745,7 +636,6 @@ def extract_data_from_image(image_path):
             line_10 = line_10.replace("Id Op. ", "")
             # print(line_10)
 
-            bank_pattern = 'Uala'
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
             proof_number_pattern = line_10
@@ -755,7 +645,6 @@ def extract_data_from_image(image_path):
             # Extract information using the regEx patterns
             details_regEx_patterns()
 
-            bank = bank_found[0] if bank_found else None
             dated = dateds_found[0] if dateds_found else None
             amount = amounts_found[0] if amounts_found else None
             amount = amount.replace('$', '$ ') #replaces '$' with '$ '
@@ -774,7 +663,6 @@ def extract_data_from_image(image_path):
             line_10 = lines[10]
             line_10 = line_10.replace("Id Op. ", "")
 
-            bank_pattern = 'Uala'
             dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
             proof_number_pattern = line_10
@@ -784,7 +672,6 @@ def extract_data_from_image(image_path):
             # Extract information using the regEx patterns
             details_regEx_patterns()
 
-            bank = bank_found[0] if bank_found else None
             dated = dateds_found[0] if dateds_found else None
             amount = amounts_found[0] if amounts_found else None
             amount = amount.replace('$', '$ ') #replaces '$' with '$ '
@@ -795,7 +682,6 @@ def extract_data_from_image(image_path):
 
         #one error, language not supported 
     elif bank_name == "Santander":
-        bank_pattern = 'Santander'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         proof_number_pattern = r'\b\d{8}\b'
@@ -805,7 +691,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        bank = bank_found[0] if bank_found else None
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -815,14 +700,13 @@ def extract_data_from_image(image_path):
 
     elif bank_name == "Cuenta DNI":
 
-        bank_pattern = 'Cuenta DNI'
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern = r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
         cuit_pattern = r'\b\d{11}\b'
 
         # if lines[0] == "fo al":
         # if lines[1] == "v4 DNI":
-            #payer name
+        #payer name
         lines_10 = lines[10]
             
         proof_number_pattern = r'\b\d{6,8}\b' #6,8
@@ -831,8 +715,6 @@ def extract_data_from_image(image_path):
         # Extract information using the regEx patterns
         details_regEx_patterns()
 
-        # bank = bank_found[0] if bank_found else None
-        bank = bank_pattern
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[0] if amounts_found else None
         amount = amount.replace('.', '')
@@ -845,7 +727,6 @@ def extract_data_from_image(image_path):
         #for payer name
         line_14 = lines[14]
         
-        bank_pattern = 'Macro' #'usec' #HSBC is detected as that
         dated_pattern = r'\b\d{1,2}/\d{1,2}/\d{4}\b'
         amount_pattern =  r'\$\s*\d+\,?\d*' 
         #r'\$\s*\d[\d,]*' #r'\$\s*\d+\.?\d*' #r'\$\s*\d[\d,\.]*'
@@ -855,7 +736,7 @@ def extract_data_from_image(image_path):
 
         # Extract information using the regEx patterns
         details_regEx_patterns()
-        bank = "Macro"
+        
         dated = dateds_found[0] if dateds_found else None
         amount = amounts_found[1] if amounts_found else None
         amount = re.sub(',', '', amount) #amount.replace(',', '')
@@ -866,6 +747,7 @@ def extract_data_from_image(image_path):
 
     else:
         move_to_undetected(image_path, folder_path)
+    
     # Return the extracted data
     return {
         'BANCO': bank_name,
@@ -919,19 +801,58 @@ def check_image_and_padding(folder_path):
 
 # Process images in the folder and save Excel file
 pdf_to_image(folder_path)
+
+print(' ')
+for char in ['P','D','F','s',' ','c','o','n','v','e','r','t','e','d',' ','t','o',' ','i','m','a','g','e','s',' ','s','u','c','c','e','s','s','f','u','l','l','y','.','.','.','.']:
+# for char in b:
+    print(char, end='')
+    time.sleep(0.1)
+print('')
+
+print('')
+
+for char in ['v','e','r','i','f','y','i','n','g',' ','t','h','e',' ','i','m','a','g','e','s','.','.','.']:
+    print(char, end="")
+    time.sleep(0.1)
+print()
+
+chk_anim = ['checking','checking.','checking..','checking...','checking....']
+for i in range(2):
+    for char in chk_anim:
+        print(char, end="\r")
+        time.sleep(1)
+    print(' ' * len(chk_anim[-1]), end="\r")  # Erase the line
+    time.sleep(0.5)
+
+print()
+for char in ['c','h','e','c','k','i','n','g',' ','c','o','m','p','l','e','t','e','d','.','.','.',' ','m','o','v','i','n','g',' ','o','n',' ','t','o',' ','e','x','t','r','a','c','t','i','o','n']:    
+    print(char, end='')
+    time.sleep(0.05)
+print("\n")
+print(' ')
+
 check_image_and_padding(folder_path)
 
 
 # sum and adding and saving and opening the file
+one_space_row = [None, None, None, None, None, None, None]
+ws.append(one_space_row)
 
-total_sum_row = [None, None, None, None, None, None, None]
-ws.append(total_sum_row)
 
 total_sum = sum(last_amt)
+
+# Create a bold font style
+bold_font = Font(bold=True)
+
 # Append the total sum row to the Excel sheet
 total_sum_row = ['SUMA TOTAL', None, f'${total_sum}', None, None, None, None]
 ws.append(total_sum_row)
 
+# Apply bold formatting to each cell in the added row
+for cell in ws[ws.max_row]:
+    cell.font = bold_font
+
+#extracts todays date and makes a folder out of it    
 from datetime import date
 
 today = date.today()
@@ -946,7 +867,31 @@ extracted_file_path = os.path.join(extracted_file_path, f'{formatted_dated}_extr
 # Save the Excel file
 wb.save(extracted_file_path)
 
+print(" ")
+print(" ")
+print(f"the file saved at \n {extracted_file_path}, \n please re-check, the excel sheet, because there might be some errors, and you said some details should be filled manually ")
 
-# subprocess.run(['libreoffice', extracted_file_path])
+def is_enter_pressed():
+    return msvcrt.kbhit() and ord(msvcrt.getch()) == 13
+
+
+# Wait for the user to press Enter to exit
+print(" ")
+print(" ")
+for char in ['P','r','e','s','s',' ','E','n','t','e','r',' ','t','o',' ','e','x','i','t','.','.','.']:
+    print(char, end='')
+    time.sleep(0.1)
+
+# Keep blinking the last dot until Enter is pressed
+while True:
+    print('.', end='', flush=True)
+    time.sleep(0.5)  # Adjust blinking speed as needed
+    
+    if is_enter_pressed():
+        print("\nExiting program...")
+        break
+
+
 # Open the file with Microsoft Excel in windows
-os.system(f'start "" "{extracted_file_path}"')
+os.system(f'start "{extracted_file_path}"')
+
